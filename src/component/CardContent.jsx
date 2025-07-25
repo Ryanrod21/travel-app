@@ -1,8 +1,8 @@
-'use client';
+"use client";
 
-import React from 'react';
-import { Plane } from 'lucide-react';
-import { useRouter } from 'next/navigation';
+import React from "react";
+import { Plane } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 export default function CardContent({ area }) {
   const router = useRouter();
@@ -19,9 +19,9 @@ export default function CardContent({ area }) {
               <p className="text-blue-600 text-sm">{destination.country}</p>
             </div>
             <div className="text-right">
-              <span className="text-2xl font-bold text-gray-900">
-                ${destination.price.toLocaleString()}
-              </span>
+              {/* <span className="text-2xl font-bold text-gray-900">
+                ${destination?.price.toLocaleString()}
+              </span> */}
               <p className="text-gray-600 text-sm">per person</p>
             </div>
           </div>
