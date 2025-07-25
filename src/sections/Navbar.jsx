@@ -1,6 +1,6 @@
 'use client';
 
-import { Globe, X, Menu } from 'lucide-react';
+import { Globe, X, Menu, User } from 'lucide-react';
 import Link from 'next/link';
 import { useState } from 'react';
 
@@ -40,6 +40,13 @@ export default function Navbar() {
             <button className="px-4 py-2 border border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white bg-transparent rounded-md transition-colors">
               Book Now
             </button>
+
+            <a
+              href="/log-in"
+              className="hover:text-blue-600 transition-colors text-gray-700 cursor-pointer"
+            >
+              <User />
+            </a>
           </div>
 
           <button
