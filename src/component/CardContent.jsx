@@ -7,6 +7,11 @@ import { useRouter } from 'next/navigation';
 export default function CardContent({ area }) {
   const router = useRouter();
 
+  const handleBookJourney = (destination) => {
+    localStorage.setItem('selectedDestination', JSON.stringify(destination));
+    router.push('/destination/view');
+  };
+
   return (
     <>
       {area.map((destination, index) => (
@@ -19,9 +24,6 @@ export default function CardContent({ area }) {
               <p className="text-blue-600 text-sm">{destination.country}</p>
             </div>
             <div className="text-right">
-              {/* <span className="text-2xl font-bold text-gray-900">
-                ${destination?.price.toLocaleString()}
-              </span> */}
               <p className="text-gray-600 text-sm">per person</p>
             </div>
           </div>
@@ -38,7 +40,6 @@ export default function CardContent({ area }) {
               {destination.highlights.map((highlight, idx) => (
                 <div
                   key={idx}
-                  variant="outline"
                   className="px-2 py-1 text-xs rounded-full bg-gradient-to-r from-blue-500 to-indigo-500 text-white font-medium shadow"
                 >
                   {highlight}
@@ -48,7 +49,7 @@ export default function CardContent({ area }) {
           </div>
 
           <button
-            onClick={() => router.push(`/destination/${destination.id}`)}
+            onClick={() => handleBookJourney(destination)}
             className="cursor-pointer w-full px-4 py-2 bg-gradient-to-r from-blue-500 to-indigo-500 hover:from-blue-600 hover:to-indigo-600 text-white rounded-md transition-all flex items-center justify-center"
           >
             <Plane className="h-4 w-4 mr-2" />

@@ -2,43 +2,18 @@
 
 import { useEffect, useState } from 'react';
 import { Plane } from 'lucide-react';
-import { useParams } from 'next/navigation';
 
-export default function DestinationId() {
-  const { id } = useParams();
+export default function DestinationViewPage() {
   const [destination, setDestination] = useState(null);
-  const [error, setError] = useState('');
 
   useEffect(() => {
-    const fetchDestination = async () => {
-      try {
-        const res = await fetch(`/api/generate-destinations/${id}`, {
-          cache: 'no-store',
-        });
-
-        if (!res.ok) {
-          setError('Failed to load destination');
-          return;
-        }
-
-        const data = await res.json();
-        setDestination(data);
-      } catch (err) {
-        console.error(err);
-        setError('Something went wrong');
-      }
-    };
-
-    if (id) {
-      fetchDestination();
+    const saved = localStorage.getItem('selectedDestination');
+    if (saved) {
+      setDestination(JSON.parse(saved));
     }
-  }, [id]);
+  }, []);
 
-  if (error) return <div>{error}</div>;
-  if (!destination)
-    return (
-      <div className="pt-24 pb-16 px-5 text-7xl text-center">Loading...</div>
-    );
+  if (!destination) return <div>Loading...</div>;
 
   return (
     <div className="pt-16 pb-26 min-h-screen bg-gradient-to-br from-blue-50 via-sky-50 to-indigo-50 text-gray-900">
