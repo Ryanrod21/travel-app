@@ -4,7 +4,7 @@ const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
 
-const UNSPLASH_ACCESS_KEY = process.env.UNSPLASH_ACCESS_KEY;
+const UNSPLASH_ACCESS_KEY = process.env.NEXT_PUBLIC_UNSPLASH_ACCESS_KEY;
 
 async function getUnsplashImage(query) {
   const response = await fetch(
@@ -46,7 +46,8 @@ export async function POST(request) {
     "country": "Japan",
     "description": "Capital city known for ...",
     "highlights": ["Shibuya Crossing", "Tokyo Tower", "Senso-ji Temple"],
-    "id": "1"
+    "food": "Some of the best food is ..."
+    "activities": "Here are some things you can do ..."
   }
 ]
 

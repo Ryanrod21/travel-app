@@ -27,6 +27,7 @@ export default function Home() {
       });
 
       const data = await res.json();
+
       console.log('API response:', data);
 
       if (res.ok) {
@@ -132,9 +133,11 @@ export default function Home() {
       {/* Destination Results */}
       <section ref={resultRef} id="destinations" className="py-16 px-4">
         <div className="max-w-7xl mx-auto">
-          <h2 className="text-3xl md:text-4l font-bold text-center mb-12 bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
-            Featured Destinations
-          </h2>
+          {!loading && (
+            <h2 className="text-3xl md:text-4l font-bold text-center mb-12 bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
+              Your Destination awaits for you
+            </h2>
+          )}
 
           {loading && (
             <p className="text-center text-gray-600">
@@ -152,6 +155,11 @@ export default function Home() {
               />
             ))}
           </div>
+          {!loading && prompt && destinations.length === 0 && (
+            <p className="text-center text-2xl text-gray-500 mt-10">
+              There are no destinations for this location at the moment.
+            </p>
+          )}
         </div>
       </section>
     </div>
