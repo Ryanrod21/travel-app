@@ -1,107 +1,41 @@
-"use client";
-const destinationsDummy = [
-  {
-    id: "1",
-    name: "Neo Tokyo",
-    country: "Japan",
-    image: "/placeholder.svg?height=300&width=400",
-    price: 2499,
-    rating: 4.9,
-    duration: "7 days",
-    description:
-      "Experience the cyberpunk future in the neon-lit streets of Neo Tokyo",
-    highlights: ["Shibuya Crossing", "Robot Restaurant", "Digital Art Museum"],
-  },
-  {
-    id: "2",
-    name: "Mars Colony Alpha",
-    country: "Mars",
-    image: "/placeholder.svg?height=300&width=400",
-    price: 15999,
-    rating: 4.8,
-    duration: "14 days",
-    description:
-      "Pioneer the ultimate space tourism experience on the Red Planet",
-    highlights: ["Olympus Mons", "Polar Ice Caps", "Underground Cities"],
-  },
-  {
-    id: "3",
-    name: "Atlantis Resort",
-    country: "Pacific Ocean",
-    image: "/placeholder.svg?height=300&width=400",
-    price: 4299,
-    rating: 4.7,
-    duration: "10 days",
-    description: "Dive into luxury at our underwater paradise resort",
-    highlights: ["Coral Gardens", "Submarine Tours", "Aquatic Spa"],
-  },
-  {
-    id: "4",
-    name: "Sky City",
-    country: "Cloud Nine",
-    image: "/placeholder.svg?height=300&width=400",
-    price: 3799,
-    rating: 4.9,
-    duration: "5 days",
-    description: "Float among the clouds in our revolutionary aerial city",
-    highlights: ["Cloud Walking", "Sky Gardens", "Aurora Views"],
-  },
-  {
-    id: "5",
-    name: "Cyber Singapore",
-    country: "Singapore",
-    image: "/placeholder.svg?height=300&width=400",
-    price: 1899,
-    rating: 4.6,
-    duration: "6 days",
-    description: "Explore the smart city of tomorrow with AI-guided tours",
-    highlights: ["Gardens by the Bay", "Marina Bay", "Sentosa Island"],
-  },
-  {
-    id: "6",
-    name: "Arctic Aurora",
-    country: "Norway",
-    image: "/placeholder.svg?height=300&width=400",
-    price: 2799,
-    rating: 4.8,
-    duration: "8 days",
-    description: "Witness the Northern Lights in our luxury ice hotels",
-    highlights: ["Northern Lights", "Ice Hotels", "Husky Sledding"],
-  },
-];
+'use client';
 
-import { useState } from "react";
-import { Calendar, MapPin, Navigation, Search, Users } from "lucide-react";
-import Card from "@/component/Card";
+import { useState, useRef } from 'react';
+import { Calendar, MapPin, Navigation, Search, Users } from 'lucide-react';
+import Card from '@/component/Card';
 
 export default function Home() {
-  const [prompt, setPrompt] = useState("");
+  const [prompt, setPrompt] = useState('');
   const [destinations, setDestinations] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
+  const [error, setError] = useState('');
+
+  const resultRef = useRef(null);
 
   const handleSearch = async () => {
+    resultRef.current?.scrollIntoView({ behavior: 'smooth' });
+
     if (!prompt.trim()) return;
 
     setLoading(true);
-    setError("");
+    setError('');
     try {
-      const res = await fetch("/api/generate-destinations", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
+      const res = await fetch('/api/generate-destinations', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ prompt }),
       });
 
       const data = await res.json();
-      console.log("API response:", data);
+      console.log('API response:', data);
 
       if (res.ok) {
         setDestinations(data.destinations);
       } else {
-        setError(data.error || "Something went wrong");
+        setError(data.error || 'Something went wrong');
       }
     } catch (err) {
-      setError("Request failed");
+      setError('Request failed');
       console.error(err);
     } finally {
       setLoading(false);
@@ -130,6 +64,12 @@ export default function Home() {
                   placeholder="Where do you want to explore?"
                   value={prompt}
                   onChange={(e) => setPrompt(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter') {
+                      e.preventDefault(); // optional, stops default form behavior
+                      handleSearch(); // calls your async search function
+                    }
+                  }}
                   className="border-0 bg-transparent text-gray-900 placeholder-gray-500 focus:ring-0 w-full"
                 />
               </div>
@@ -190,7 +130,7 @@ export default function Home() {
       </section>
 
       {/* Destination Results */}
-      <section id="destinations" className="py-16 px-4">
+      <section ref={resultRef} id="destinations" className="py-16 px-4">
         <div className="max-w-7xl mx-auto">
           <h2 className="text-3xl md:text-4l font-bold text-center mb-12 bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
             Featured Destinations

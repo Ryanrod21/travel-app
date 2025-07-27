@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
-import React from "react";
-import { Plane } from "lucide-react";
-import { useRouter } from "next/navigation";
+import React from 'react';
+import { Plane } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 
 export default function CardContent({ area }) {
   const router = useRouter();

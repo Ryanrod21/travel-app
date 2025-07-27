@@ -1,25 +1,43 @@
-import { OpenAI } from "openai";
+import { OpenAI } from 'openai';
 
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
+
+const UNSPLASH_ACCESS_KEY = process.env.UNSPLASH_ACCESS_KEY;
+
+async function getUnsplashImage(query) {
+  const response = await fetch(
+    `https://api.unsplash.com/search/photos?query=${encodeURIComponent(
+      query
+    )}&client_id=${UNSPLASH_ACCESS_KEY}`
+  );
+
+  if (!response.ok) {
+    console.error('Unsplash fetch failed');
+    return null;
+  }
+
+  const data = await response.json();
+  return data.results[0]?.urls?.regular || null;
+}
 
 export async function POST(request) {
   const body = await request.json();
   const prompt = body.prompt;
 
   if (!prompt) {
-    return new Response(JSON.stringify({ error: "Prompt is required" }), {
+    return new Response(JSON.stringify({ error: 'Prompt is required' }), {
       status: 400,
     });
   }
 
   try {
     const completion = await openai.chat.completions.create({
-      model: "gpt-4o",
+      model: 'gpt-4o',
       messages: [
         {
-          role: "system",
+          role: 'system',
           content: `You are a travel assistant. When given a prompt, respond with **only** valid JSON representing an array of travel destination objects, like this:
 
 [
@@ -27,15 +45,15 @@ export async function POST(request) {
     "name": "Tokyo",
     "country": "Japan",
     "description": "Capital city known for ...",
-    "highlights": ["Shibuya Crossing", "Tokyo Tower", "Senso-ji Temple"]
+    "highlights": ["Shibuya Crossing", "Tokyo Tower", "Senso-ji Temple"],
+    "id": "1"
   }
 ]
 
-Do not include any explanation, extra text, or formatting outside the JSON. If you cannot produce valid JSON, return an empty array [].
-`,
+Do not include any explanation, extra text, or formatting outside the JSON. If you cannot produce valid JSON, return an empty array [].`,
         },
         {
-          role: "user",
+          role: 'user',
           content: prompt,
         },
       ],
@@ -43,33 +61,36 @@ Do not include any explanation, extra text, or formatting outside the JSON. If y
     });
 
     let content = completion.choices[0]?.message?.content;
-
-    // Handle if content is a stringified string, parse twice if needed
     let destinations = [];
 
     try {
-      // First parse attempt
       let parsed = JSON.parse(content);
-
-      // If parsed is still a string, parse again
-      if (typeof parsed === "string") {
+      if (typeof parsed === 'string') {
         destinations = JSON.parse(parsed);
       } else {
         destinations = parsed;
       }
     } catch (e) {
       return new Response(
-        JSON.stringify({ error: "Failed to parse AI response." }),
+        JSON.stringify({ error: 'Failed to parse AI response.' }),
         { status: 500 }
       );
+    }
+
+    // Add Unsplash image for each destination
+    for (const dest of destinations) {
+      if (!dest.image) {
+        const image = await getUnsplashImage(dest.name);
+        dest.image = image || null;
+      }
     }
 
     return new Response(JSON.stringify({ destinations }), {
       status: 200,
     });
   } catch (err) {
-    console.error("OpenAI error:", err);
-    return new Response(JSON.stringify({ error: "OpenAI request failed" }), {
+    console.error('OpenAI error:', err);
+    return new Response(JSON.stringify({ error: 'OpenAI request failed' }), {
       status: 500,
     });
   }

@@ -1,17 +1,44 @@
 'use client';
 
-import { useParams } from 'next/navigation';
-import { destinations } from '@/app/dummyData/data';
+import { useEffect, useState } from 'react';
 import { Plane } from 'lucide-react';
+import { useParams } from 'next/navigation';
 
 export default function DestinationId() {
-  const params = useParams(); // ✅ grab params from the hook
+  const { id } = useParams();
+  const [destination, setDestination] = useState(null);
+  const [error, setError] = useState('');
 
-  const destination = destinations.find((d) => d.id === params.id);
+  useEffect(() => {
+    const fetchDestination = async () => {
+      try {
+        const res = await fetch(`/api/generate-destinations/${id}`, {
+          cache: 'no-store',
+        });
 
-  if (!destination) {
-    return <div>Destination not found</div>;
-  }
+        if (!res.ok) {
+          setError('Failed to load destination');
+          return;
+        }
+
+        const data = await res.json();
+        setDestination(data);
+      } catch (err) {
+        console.error(err);
+        setError('Something went wrong');
+      }
+    };
+
+    if (id) {
+      fetchDestination();
+    }
+  }, [id]);
+
+  if (error) return <div>{error}</div>;
+  if (!destination)
+    return (
+      <div className="pt-24 pb-16 px-5 text-7xl text-center">Loading...</div>
+    );
 
   return (
     <div className="pt-16 pb-26 min-h-screen bg-gradient-to-br from-blue-50 via-sky-50 to-indigo-50 text-gray-900">
@@ -35,12 +62,12 @@ export default function DestinationId() {
             {destination.description}
           </p>
 
-          <div className="text-right">
+          {/* <div className="text-right">
             <span className="text-4xl font-bold text-gray-900">
               ${destination.price.toLocaleString()}
             </span>
             <p className="text-gray-600 text-l">per person</p>
-          </div>
+          </div> */}
         </div>
 
         <div className="flex justify-between items-center w-full mt-10">
@@ -61,10 +88,7 @@ export default function DestinationId() {
             </div>
           </div>
 
-          <button
-            onClick={() => router.push(`/destination/${destination.id}`)}
-            className="cursor-pointer w-95 h-12  px-4 py-2 bg-gradient-to-r from-blue-500 to-indigo-500 hover:from-blue-600 hover:to-indigo-600 text-white rounded-md transition-all flex items-center justify-center"
-          >
+          <button className="cursor-pointer w-95 h-12  px-4 py-2 bg-gradient-to-r from-blue-500 to-indigo-500 hover:from-blue-600 hover:to-indigo-600 text-white rounded-md transition-all flex items-center justify-center">
             <Plane className="h-4 w-4 mr-2" />
             Book Journey
           </button>
