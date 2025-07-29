@@ -2,10 +2,14 @@
 
 import { useEffect, useState } from 'react';
 import { Plane } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 
 export default function DestinationViewPage() {
   const [destination, setDestination] = useState(null);
   const [images, setImages] = useState([]);
+  const [mainImage, setMainImage] = useState(null);
+
+  const router = useRouter();
 
   useEffect(() => {
     const saved = localStorage.getItem('selectedDestination');
@@ -41,6 +45,7 @@ export default function DestinationViewPage() {
       }
 
       setImages(data.results.map((img) => img.urls.regular));
+      setMainImage(data.results[0].urls.regular); // <-- set the default main image
     } catch (error) {
       console.error('Failed to fetch Unsplash images', error);
       setImages([]);
@@ -63,19 +68,26 @@ export default function DestinationViewPage() {
       </section>
 
       <div className="flex items-center mx-auto justify-center flex-col max-w-7xl py-16">
-        <img
-          className="object-cover rounded-lg w-410 h-170 mb-6"
-          src={destination.image}
-        />
+        {/* 🔍 Main Image Display */}
+        {mainImage && (
+          <img
+            className="object-cover rounded-lg w-full h-[800px] mb-6 transition duration-300 shadow-lg"
+            src={mainImage}
+            alt="Selected destination"
+          />
+        )}
 
-        {/* 🖼️ Show Unsplash Images */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mb-10">
+        {/* 🖼️ Thumbnails */}
+        <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-4 mb-10">
           {images.map((url, i) => (
             <img
               key={i}
               src={url}
-              alt="Destination"
-              className="rounded-lg object-cover w-full h-60 shadow-md"
+              alt={`Thumbnail ${i}`}
+              onClick={() => setMainImage(url)}
+              className={`rounded-lg object-cover w-full h-28 cursor-pointer shadow-md hover:scale-105 transition-transform duration-200 ${
+                mainImage === url ? 'ring-4 ring-blue-500' : ''
+              }`}
             />
           ))}
         </div>
@@ -88,6 +100,8 @@ export default function DestinationViewPage() {
           <p className="text-gray-700 text-2xl mb-4">
             {destination.activities}
           </p>
+          <p className="text-gray-700 text-2xl mb-4">{destination.history}</p>
+          <p className="text-gray-700 text-2xl mb-4">{destination.sports}</p>
         </div>
 
         <div className="flex justify-between items-center w-full mt-10">
@@ -107,7 +121,12 @@ export default function DestinationViewPage() {
             </div>
           </div>
 
-          <button className="cursor-pointer w-95 h-12 px-4 py-2 bg-gradient-to-r from-blue-500 to-indigo-500 hover:from-blue-600 hover:to-indigo-600 text-white rounded-md transition-all flex items-center justify-center">
+          <button
+            onClick={() =>
+              router.push(`/checkout/${encodeURIComponent(destination.name)}`)
+            }
+            className="cursor-pointer w-95 h-12 px-4 py-2 bg-gradient-to-r from-blue-500 to-indigo-500 hover:from-blue-600 hover:to-indigo-600 text-white rounded-md transition-all flex items-center justify-center"
+          >
             <Plane className="h-4 w-4 mr-2" />
             Book Journey
           </button>
