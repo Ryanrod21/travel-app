@@ -1,14 +1,19 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { Plane } from 'lucide-react';
+import { Bookmark, Plane, BookmarkMinus, BookmarkCheck } from 'lucide-react';
 import { useRouter } from 'next/navigation';
+import { useAuth } from '@/app/context/authcontext';
+import { auth, db } from '@/app/firebase/firebaseConfig';
+import { doc, updateDoc, arrayUnion } from 'firebase/firestore';
+import { Minus } from 'lucide-react';
 
 export default function DestinationViewPage() {
   const [destination, setDestination] = useState(null);
   const [images, setImages] = useState([]);
   const [mainImage, setMainImage] = useState(null);
-
+  const { user, loading, updateUserDestinations } = useAuth();
+  const [hovered, setHovered] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
@@ -49,6 +54,52 @@ export default function DestinationViewPage() {
     } catch (error) {
       console.error('Failed to fetch Unsplash images', error);
       setImages([]);
+    }
+  }
+
+  // Determine if bookmarked:
+  const isBookmarked = user?.destinations?.some(
+    (d) => d.name === destination.name
+  );
+
+  const icon = !isBookmarked
+    ? Bookmark
+    : hovered
+    ? BookmarkMinus
+    : BookmarkCheck;
+
+  const label = !isBookmarked
+    ? 'Bookmark'
+    : hovered
+    ? 'Remove Bookmark'
+    : 'Bookmarked';
+
+  const Icon = icon;
+
+  async function toggleBookmark() {
+    if (!user) {
+      alert('You need to be logged in to bookmark destinations.');
+      return;
+    }
+
+    try {
+      let newDestinations;
+      if (isBookmarked) {
+        // Remove destination
+        newDestinations = user.destinations.filter(
+          (d) => d.name !== destination.name
+        );
+      } else {
+        // Add destination
+        newDestinations = [...(user.destinations || []), destination];
+      }
+
+      await updateUserDestinations(newDestinations);
+
+      alert(isBookmarked ? 'Bookmark removed!' : 'Destination bookmarked!');
+    } catch (error) {
+      console.error('Error toggling bookmark:', error);
+      alert('Failed to update bookmark. Try again.');
     }
   }
 
@@ -120,15 +171,33 @@ export default function DestinationViewPage() {
             </div>
           </div>
 
-          <button
-            onClick={() =>
-              router.push(`/checkout/${encodeURIComponent(destination.name)}`)
-            }
-            className="cursor-pointer w-95 h-12 px-4 py-2 bg-gradient-to-r from-blue-500 to-indigo-500 hover:from-blue-600 hover:to-indigo-600 text-white rounded-md transition-all flex items-center justify-center"
-          >
-            <Plane className="h-4 w-4 mr-2" />
-            Book Journey
-          </button>
+          <div className="flex flex-col gap-5">
+            <button
+              onClick={toggleBookmark}
+              onMouseEnter={() => setHovered(true)}
+              onMouseLeave={() => setHovered(false)}
+              className={`cursor-pointer w-95 h-12 px-4 py-2 rounded-md transition-all flex items-center justify-center
+              ${
+                isBookmarked
+                  ? 'bg-green-600 hover:bg-red-600 text-white'
+                  : 'bg-blue-500 hover:bg-indigo-600 text-white'
+              }
+              `}
+            >
+              <Icon className="mr-2" />
+              {label}
+            </button>
+
+            <button
+              onClick={() =>
+                router.push(`/checkout/${encodeURIComponent(destination.name)}`)
+              }
+              className="cursor-pointer w-95 h-12 px-4 py-2 bg-gradient-to-r from-blue-500 to-indigo-500 hover:from-blue-600 hover:to-indigo-600 text-white rounded-md transition-all flex items-center justify-center"
+            >
+              <Plane className="h-4 w-4 mr-2" />
+              Book Journey
+            </button>
+          </div>
         </div>
       </div>
     </div>

@@ -3,7 +3,7 @@
 import { createContext, useContext, useEffect, useState } from 'react';
 import { auth, db } from '../firebase/firebaseConfig';
 import { onAuthStateChanged } from 'firebase/auth';
-import { getDoc, doc } from 'firebase/firestore';
+import { getDoc, doc, updateDoc } from 'firebase/firestore';
 
 const AuthContext = createContext();
 
@@ -33,8 +33,17 @@ export const AuthProvider = ({ children }) => {
     return () => unsubscribe();
   }, []);
 
+  // New function to update bookmarks both locally and in Firestore
+  async function updateUserDestinations(newDestinations) {
+    if (!user) return;
+
+    const userDocRef = doc(db, 'users', user.uid);
+    await updateDoc(userDocRef, { destinations: newDestinations });
+    setUser((prev) => ({ ...prev, destinations: newDestinations }));
+  }
+
   return (
-    <AuthContext.Provider value={{ user, loading }}>
+    <AuthContext.Provider value={{ user, loading, updateUserDestinations }}>
       {children}
     </AuthContext.Provider>
   );
