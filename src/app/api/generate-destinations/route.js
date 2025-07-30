@@ -25,6 +25,7 @@ async function getUnsplashImage(query) {
 export async function POST(request) {
   const body = await request.json();
   const prompt = body.prompt;
+  const location = body.location;
 
   if (!prompt) {
     return new Response(JSON.stringify({ error: 'Prompt is required' }), {
@@ -48,16 +49,17 @@ export async function POST(request) {
     "highlights": ["Shibuya Crossing", "Tokyo Tower", "Senso-ji Temple"],
     "food": "Some of the best food is also name the best dish they have ...",
     "activities": "Here are some things you can do ...",
-    "history" ; "History on the destination...,
-    "sports"; "If they have a major sports team name them all and say what they are and play, if not don't say antying...",
-  }
+    "history": "History on the destination...,
+    "sports": "If they have a major sports team name them all and say what they are and play, if not don't say antying...",
+    "travel": "Fastest way to get there from the user's location and approximate travel time"
+    }
 ]
 
 Do not include any explanation, extra text, or formatting outside the JSON. If you cannot produce valid JSON, return an empty array [].`,
         },
         {
           role: 'user',
-          content: prompt,
+          content: `User is interested in traveling to ${prompt}. The user is currently located in ${location}. Include the best travel method and estimated travel time for each destination.`,
         },
       ],
       temperature: 0,

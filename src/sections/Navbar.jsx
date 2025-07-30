@@ -2,11 +2,34 @@
 
 import { Globe, X, Menu, User } from 'lucide-react';
 import Link from 'next/link';
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
+import { useAuth } from '@/app/context/authcontext';
 
 export default function Navbar() {
+  const { user, loading } = useAuth();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [dropdown, setDropdown] = useState(false);
+  const dropdownRef = useRef(null);
 
+  // Close dropdown on outside click
+  useEffect(() => {
+    function handleClickOutside(event) {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setDropdown(false);
+      }
+    }
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
+
+  if (loading) {
+    return (
+      <p className="text-center mt-10 text-lg">Checking sign-in status...</p>
+    );
+  }
   return (
     <nav className="fixed top-0 w-full z-50 bg-white/80 backdrop-blur-md border-b border-blue-200/50 shadow-lg">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -41,12 +64,54 @@ export default function Navbar() {
               Book Now
             </button>
 
-            <a
-              href="/log-in"
-              className="hover:text-blue-600 transition-colors text-gray-700 cursor-pointer"
-            >
-              <User />
-            </a>
+            <div className="relative" ref={dropdownRef}>
+              <div className="flex items-center gap-4 ">
+                {user && (
+                  <>
+                    <p className="text-center text-lg text-blue-600">
+                      Welcome back, {user.name}!
+                    </p>
+                    <button
+                      className="hover:text-blue-600 transition-colors text-gray-700 cursor-pointer"
+                      onClick={() => setDropdown(!dropdown)}
+                      aria-label="User menu"
+                    >
+                      <User />
+                    </button>
+                  </>
+                )}
+                {!user && (
+                  <button
+                    className="hover:text-blue-600 transition-colors text-gray-700 cursor-pointer"
+                    onClick={() => setDropdown(!dropdown)}
+                    aria-label="User menu"
+                  >
+                    <User />
+                  </button>
+                )}
+              </div>
+
+              {dropdown && (
+                <div className="absolute left-0 top-5 mt-2 w-32 bg-white border border-gray-200 rounded shadow-lg z-10">
+                  {!user && (
+                    <a
+                      href="/log-in"
+                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                    >
+                      Login
+                    </a>
+                  )}
+                  {user && (
+                    <a
+                      href="/profile"
+                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                    >
+                      Profile
+                    </a>
+                  )}
+                </div>
+              )}
+            </div>
           </div>
 
           <button

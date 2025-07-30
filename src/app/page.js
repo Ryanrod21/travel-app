@@ -3,8 +3,11 @@
 import { useState, useRef } from 'react';
 import { Calendar, MapPin, Navigation, Search, Users } from 'lucide-react';
 import Card from '@/component/Card';
+import { useAuth } from './context/authcontext';
+import SearchBall from '@/component/SearchBall';
 
 export default function Home() {
+  const [location, setLocation] = useState('');
   const [prompt, setPrompt] = useState('');
   const [status, setStatus] = useState('idle'); // 'idle' | 'searching' | 'done'
   const [destinations, setDestinations] = useState([]);
@@ -12,6 +15,14 @@ export default function Home() {
   const [error, setError] = useState('');
 
   const resultRef = useRef(null);
+
+  const { user, loading: authLoading } = useAuth();
+
+  if (authLoading) {
+    return (
+      <p className="text-center mt-10 text-lg">Checking sign-in status...</p>
+    );
+  }
 
   const handleSearch = async () => {
     resultRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -26,7 +37,7 @@ export default function Home() {
       const res = await fetch('/api/generate-destinations', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ prompt }),
+        body: JSON.stringify({ prompt, location }),
       });
 
       const data = await res.json();
@@ -60,10 +71,25 @@ export default function Home() {
           </p>
 
           {/* Search Bar */}
-          <div className="max-w-2xl mx-auto bg-white/70 backdrop-blur-md rounded-full p-2 border border-blue-300/50 shadow-xl">
-            <div className="flex items-center space-x-4">
-              <div className="flex-1 flex items-center space-x-2 px-4">
+          <div className="max-w-3xl mx-auto bg-white/70 backdrop-blur-md rounded-full p-2 border border-blue-300/50 shadow-xl">
+            <div className="flex items-center space-x-10">
+              <div className="flex-1 flex items-center space-x-2 px-3 m-0">
                 <MapPin className="h-5 w-5 text-blue-600" />
+                <input
+                  placeholder="Where are you traveling from ?"
+                  value={location}
+                  onChange={(e) => setLocation(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter') {
+                      e.preventDefault(); // optional, stops default form behavior
+                      handleSearch(); // calls your async search function
+                    }
+                  }}
+                  className="border-0 bg-transparent text-gray-900 placeholder-gray-500 focus:ring-0 w-full"
+                />
+              </div>
+
+              <div className="flex-1 flex items-center space-x-2 px-3 m-0 border-l border-gray-300">
                 <input
                   placeholder="Where do you want to explore?"
                   value={prompt}
@@ -76,16 +102,6 @@ export default function Home() {
                   }}
                   className="border-0 bg-transparent text-gray-900 placeholder-gray-500 focus:ring-0 w-full"
                 />
-              </div>
-
-              <div className="flex items-center space-x-2 px-4 border-l border-gray-300">
-                <Calendar className="h-5 w-5 text-blue-600" />
-                <span className="text-gray-700">Dates</span>
-              </div>
-
-              <div className="flex items-center space-x-2 px-4 border-l border-gray-300">
-                <Users className="h-5 w-5 text-blue-600" />
-                <span className="text-gray-700">Travelers</span>
               </div>
 
               <button
@@ -135,48 +151,7 @@ export default function Home() {
                         : 'Use The Search Bar above to find your destination...'}
                     </p>
 
-                    {/* Bouncing Dots (extra if searching) */}
-
-                    {status === 'searching' && (
-                      <>
-                        <div className="absolute top-1/4 left-1/4 animate-bounce">
-                          <div className="w-4 h-4 bg-blue-500 rounded-full shadow-lg shadow-blue-500/50"></div>
-                        </div>
-                        <div className="absolute bottom-1/4 right-1/13 animate-bounce">
-                          <div className="w-4 h-4 bg-blue-500 rounded-full shadow-lg shadow-blue-500/50"></div>
-                        </div>
-                        <div className="absolute top-1/3 right-1/3 animate-bounce delay-300">
-                          <div className="w-4 h-4 bg-sky-500 rounded-full shadow-lg shadow-sky-500/50"></div>
-                        </div>
-                        <div className="absolute top-1/13 left-1/13 animate-bounce delay-300">
-                          <div className="w-4 h-4 bg-sky-500 rounded-full shadow-lg shadow-sky-500/50"></div>
-                        </div>
-                        <div className="absolute top-1/8 right-1/6 animate-bounce delay-700">
-                          <div className="w-4 h-4 bg-indigo-500 rounded-full shadow-lg shadow-indigo-500/50"></div>
-                        </div>
-                        <div className="absolute bottom-1/2 left-1/16 animate-bounce delay-700">
-                          <div className="w-4 h-4 bg-indigo-500 rounded-full shadow-lg shadow-indigo-500/50"></div>
-                        </div>
-                        <div className="absolute top-2/3 left-[26%] animate-bounce delay-200">
-                          <div className="w-4 h-4 bg-pink-400 rounded-full shadow-lg shadow-pink-400/50"></div>
-                        </div>
-                        <div className="absolute top-[40%] right-[20%] animate-bounce delay-200">
-                          <div className="w-4 h-4 bg-pink-400 rounded-full shadow-lg shadow-pink-400/50"></div>
-                        </div>
-                        <div className="absolute bottom-1/3 right-1/4 animate-bounce delay-[450ms]">
-                          <div className="w-4 h-4 bg-yellow-400 rounded-full shadow-lg shadow-yellow-400/50"></div>
-                        </div>
-                        <div className="absolute top-1/2 left-[19%] animate-bounce delay-[450ms]">
-                          <div className="w-4 h-4 bg-yellow-400 rounded-full shadow-lg shadow-yellow-400/50"></div>
-                        </div>
-                        <div className="absolute bottom-[10%] right-[30%] animate-bounce delay-[600ms]">
-                          <div className="w-4 h-4 bg-green-400 rounded-full shadow-lg shadow-green-400/50"></div>
-                        </div>
-                        <div className="absolute bottom-[20%] left-[10%] animate-bounce delay-[600ms]">
-                          <div className="w-4 h-4 bg-green-400 rounded-full shadow-lg shadow-green-400/50"></div>
-                        </div>
-                      </>
-                    )}
+                    {status === 'searching' && <SearchBall />}
                   </div>
                 </div>
               </div>

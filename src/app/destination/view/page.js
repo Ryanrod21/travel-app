@@ -100,6 +100,7 @@ export default function DestinationViewPage() {
           </p>
           <p className="text-gray-700 text-2xl mb-4">{destination.history}</p>
           <p className="text-gray-700 text-2xl mb-4">{destination.sports}</p>
+          <p className="text-gray-700 text-2xl mb-4">{destination.travel}</p>
         </div>
 
         <div className="flex justify-between items-center w-full mt-10">

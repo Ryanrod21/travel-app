@@ -2,7 +2,7 @@ import { Star } from 'lucide-react';
 import CardContent from './CardContent';
 import React from 'react';
 
-export default function Card({ area, className = '' }) {
+export default function Card({ area, className = '', location }) {
   return (
     <>
       {area.map((destination, index) => (
