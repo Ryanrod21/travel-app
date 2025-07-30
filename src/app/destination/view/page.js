@@ -45,7 +45,7 @@ export default function DestinationViewPage() {
       }
 
       setImages(data.results.map((img) => img.urls.regular));
-      setMainImage(data.results[0].urls.regular); // <-- set the default main image
+      setMainImage(data.results[0].urls.regular);
     } catch (error) {
       console.error('Failed to fetch Unsplash images', error);
       setImages([]);
@@ -68,7 +68,6 @@ export default function DestinationViewPage() {
       </section>
 
       <div className="flex items-center mx-auto justify-center flex-col max-w-7xl py-16">
-        {/* 🔍 Main Image Display */}
         {mainImage && (
           <img
             className="object-cover rounded-lg w-full h-[800px] mb-6 transition duration-300 shadow-lg"
@@ -77,7 +76,6 @@ export default function DestinationViewPage() {
           />
         )}
 
-        {/* 🖼️ Thumbnails */}
         <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-4 mb-10">
           {images.map((url, i) => (
             <img

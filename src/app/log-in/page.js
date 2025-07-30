@@ -7,7 +7,7 @@ import { signInWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '../firebase/firebaseConfig';
 import { useRouter } from 'next/navigation';
 
-export default function Users() {
+export default function LogIn() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
@@ -27,8 +27,7 @@ export default function Users() {
 
     try {
       await signInWithEmailAndPassword(auth, email, password);
-      // Redirect or update UI on successful login
-      router.push('/dashboard'); // change to your dashboard or home page
+      router.push('/');
     } catch (err) {
       setError(err.message);
     } finally {

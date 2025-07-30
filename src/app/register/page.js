@@ -6,6 +6,7 @@ import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { auth, db } from '../firebase/firebaseConfig';
 import { setDoc, doc } from 'firebase/firestore';
 import BouncingBall from '@/component/BouncingBallPage';
+import { useRouter } from 'next/navigation';
 
 export default function Register() {
   const [name, setName] = useState('');
@@ -14,6 +15,8 @@ export default function Register() {
   const [confirmPass, setConfirmPass] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+
+  const router = useRouter();
 
   const handleRegister = async (e) => {
     e.preventDefault();
@@ -46,6 +49,8 @@ export default function Register() {
         createdAt: new Date(),
         destinations: [], // initialize empty array for storing destinations
       });
+
+      router.push('/');
 
       alert('Registration successful! You can now log in.');
       // optionally redirect user or clear form here
