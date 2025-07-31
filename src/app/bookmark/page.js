@@ -2,13 +2,35 @@
 
 import { useAuth } from '@/app/context/authcontext';
 import { useRouter } from 'next/navigation';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
+import { doc, getDoc } from 'firebase/firestore';
+import { db } from '@/app/firebase/firebaseConfig';
 
 export default function BookmarksPage() {
   const { user, loading } = useAuth();
   const router = useRouter();
+  const [destinations, setDestinations] = useState([]);
+  const [fetching, setFetching] = useState(true);
 
-  if (loading) return <p className="p-8 text-xl">Loading your bookmarks...</p>;
+  useEffect(() => {
+    const fetchDestinations = async () => {
+      if (user?.uid) {
+        const userRef = doc(db, 'users', user.uid);
+        const userSnap = await getDoc(userRef);
+        if (userSnap.exists()) {
+          const data = userSnap.data();
+          setDestinations(data.destinations || []);
+        }
+      }
+      setFetching(false);
+    };
+
+    fetchDestinations();
+  }, [user?.uid]);
+
+  if (loading || fetching)
+    return <p className="p-8 text-xl">Loading your bookmarks...</p>;
+
   if (!user) {
     router.push('/log-in');
     return null;
@@ -18,8 +40,6 @@ export default function BookmarksPage() {
     localStorage.setItem('selectedDestination', JSON.stringify(destination));
     router.push('/destination/view');
   };
-
-  const destinations = user.destinations || [];
 
   return (
     <div className="min-h-screen pt-20 px-6 bg-gradient-to-br from-blue-50 via-sky-50 to-indigo-50">
@@ -31,7 +51,7 @@ export default function BookmarksPage() {
         {destinations.length === 0 ? (
           <p className="text-center text-lg text-gray-600">No bookmarks yet.</p>
         ) : (
-          <div className=" grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {destinations.map((destination, idx) => (
               <div
                 key={idx}

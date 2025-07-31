@@ -28,11 +28,6 @@ export default function Navbar() {
     };
   }, []);
 
-  if (loading) {
-    return (
-      <p className="text-center mt-10 text-lg">Checking sign-in status...</p>
-    );
-  }
   return (
     <nav className="fixed top-0 w-full z-50 bg-white/80 backdrop-blur-md border-b border-blue-200/50 shadow-lg">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

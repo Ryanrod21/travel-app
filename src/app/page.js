@@ -18,12 +18,6 @@ export default function Home() {
 
   const { user, loading: authLoading } = useAuth();
 
-  if (authLoading) {
-    return (
-      <p className="text-center mt-10 text-lg">Checking sign-in status...</p>
-    );
-  }
-
   const handleSearch = async () => {
     resultRef.current?.scrollIntoView({ behavior: 'smooth' });
 
