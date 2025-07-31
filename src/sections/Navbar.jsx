@@ -1,15 +1,18 @@
 'use client';
 
-import { Globe, X, Menu, User } from 'lucide-react';
+import { Globe, X, Menu, User, Bookmark } from 'lucide-react';
 import Link from 'next/link';
 import { useState, useEffect, useRef } from 'react';
 import { useAuth } from '@/app/context/authcontext';
+import { useRouter } from 'next/navigation';
 
 export default function Navbar() {
   const { user, loading } = useAuth();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [dropdown, setDropdown] = useState(false);
   const dropdownRef = useRef(null);
+
+  const router = useRouter();
 
   // Close dropdown on outside click
   useEffect(() => {
@@ -63,6 +66,15 @@ export default function Navbar() {
             <button className="px-4 py-2 border border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white bg-transparent rounded-md transition-colors">
               Book Now
             </button>
+
+            {user && (
+              <button
+                onClick={() => router.push('/bookmark')}
+                className="hover:text-blue-600 transition-colors text-gray-700 cursor-pointer"
+              >
+                <Bookmark />
+              </button>
+            )}
 
             <div className="relative" ref={dropdownRef}>
               <div className="flex items-center gap-4 ">

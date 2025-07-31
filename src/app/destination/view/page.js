@@ -58,9 +58,8 @@ export default function DestinationViewPage() {
   }
 
   // Determine if bookmarked:
-  const isBookmarked = user?.destinations?.some(
-    (d) => d.name === destination.name
-  );
+  const isBookmarked =
+    destination && user?.destinations?.some((d) => d.name === destination.name);
 
   const icon = !isBookmarked
     ? Bookmark
