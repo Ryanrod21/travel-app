@@ -38,7 +38,7 @@ export default function BookmarksPage() {
 
   const handleBookJourney = (destination) => {
     localStorage.setItem('selectedDestination', JSON.stringify(destination));
-    router.push('/destination/view');
+    router.push(`/destination/view/${encodeURIComponent(destination.name)}`);
   };
 
   return (

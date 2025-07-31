@@ -4,11 +4,12 @@ import { useEffect, useState } from 'react';
 import { Bookmark, Plane, BookmarkMinus, BookmarkCheck } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/app/context/authcontext';
-import { auth, db } from '@/app/firebase/firebaseConfig';
-import { doc, updateDoc, arrayUnion } from 'firebase/firestore';
-import { Minus } from 'lucide-react';
+import { useParams } from 'next/navigation';
 
 export default function DestinationViewPage() {
+  const { destination: destinationParam } = useParams(); // 👈 get it from URL
+  const decodedName = decodeURIComponent(destinationParam);
+
   const [destination, setDestination] = useState(null);
   const [images, setImages] = useState([]);
   const [mainImage, setMainImage] = useState(null);
@@ -20,12 +21,12 @@ export default function DestinationViewPage() {
     const saved = localStorage.getItem('selectedDestination');
     if (saved) {
       const parsed = JSON.parse(saved);
-      setDestination(parsed);
-
-      // 🔍 Fetch multiple Unsplash images
-      fetchUnsplashImages(parsed.name);
+      if (parsed.name === decodedName) {
+        setDestination(parsed);
+        fetchUnsplashImages(decodedName);
+      }
     }
-  }, []);
+  }, [decodedName]);
 
   async function fetchUnsplashImages(query) {
     try {

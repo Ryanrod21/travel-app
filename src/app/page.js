@@ -85,7 +85,7 @@ export default function Home() {
 
               <div className="flex-1 flex items-center space-x-2 px-3 m-0 border-l border-gray-300">
                 <input
-                  placeholder="Where do you want to explore?"
+                  placeholder="Where do you want to explore ?"
                   value={prompt}
                   onChange={(e) => setPrompt(e.target.value)}
                   onKeyDown={(e) => {
@@ -109,7 +109,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Map Section */}
       <section
         ref={resultRef}
         id="map"
@@ -129,12 +128,14 @@ export default function Home() {
                   <div className="text-center">
                     <Navigation
                       className={`h-16 w-16 text-blue-600 mx-auto mb-4 ${
-                        status === 'searching'
-                          ? 'animate-nav-move'
-                          : 'animate-pulse'
+                        status === 'searching' ? 'animate-nav-move' : 'none'
                       }`}
                     />
-                    <h3 className="text-center text-2xl text-blue-600 animate-pulse">
+                    <h3
+                      className={`text-center text-2xl text-blue-600 ${
+                        status === 'searching' ? 'animate-pulse' : 'none'
+                      }`}
+                    >
                       {status === 'searching'
                         ? 'Searching for Destinations...'
                         : 'Interactive Galactic Map'}

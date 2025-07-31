@@ -9,7 +9,7 @@ export default function CardContent({ area }) {
 
   const handleBookJourney = (destination) => {
     localStorage.setItem('selectedDestination', JSON.stringify(destination));
-    router.push('/destination/view');
+    router.push(`/destination/view/${encodeURIComponent(destination.name)}`);
   };
 
   return (

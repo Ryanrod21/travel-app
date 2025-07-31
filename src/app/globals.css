@@ -1,4 +1,4 @@
-@import "tailwindcss";
+@import 'tailwindcss';
 
 :root {
   --background: #ffffff;
@@ -17,6 +17,36 @@
     --background: #0a0a0a;
     --foreground: #ededed;
   }
+}
+
+@keyframes pulse-left-to-right {
+  0%,
+  100% {
+    opacity: 0.3;
+    transform: translateX(0);
+  }
+  50% {
+    opacity: 1;
+    transform: translateX(5px);
+  }
+}
+
+@keyframes nav-move {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  50% {
+    transform: translateX(1.5rem);
+  }
+}
+
+.animate-nav-move {
+  animation: nav-move 1.5s ease-in-out infinite;
+}
+
+.animate-pulse-left-to-right {
+  animation: pulse-left-to-right 1.2s ease-in-out infinite;
 }
 
 body {
