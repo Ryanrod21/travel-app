@@ -14,7 +14,7 @@ export default function Profile() {
       <div className="pt-24 pb-16 px-5">
         <div className="max-w-7xl mx-auto text-center">
           <h1 className="text-5xl pb-5 md:text-7xl font-bold mb-6 bg-gradient-to-r from-blue-600 via-sky-500 to-indigo-600 bg-clip-text text-transparent">
-            Welcome to your profile {user.name}
+            Welcome to your profile <br></br> {user.name}
           </h1>
           <p className="text-xl md:text-2xl mb-8 text-gray-600 max-w-3xl mx-auto">
             Embark on extraordinary journeys to destinations that exist beyond

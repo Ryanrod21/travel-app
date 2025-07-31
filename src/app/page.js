@@ -1,7 +1,14 @@
 'use client';
 
 import { useState, useRef } from 'react';
-import { Calendar, MapPin, Navigation, Search, Users } from 'lucide-react';
+import {
+  Calendar,
+  MapPin,
+  Navigation,
+  Plane,
+  Search,
+  Users,
+} from 'lucide-react';
 import Card from '@/component/Card';
 import { useAuth } from './context/authcontext';
 import SearchBall from '@/component/SearchBall';
@@ -53,7 +60,6 @@ export default function Home() {
 
   return (
     <div className="pt-16 pb-26 min-h-screen bg-gradient-to-br from-blue-50 via-sky-50 to-indigo-50 text-gray-900">
-      {/* Hero Section */}
       <section className="pt-24 pb-16 px-5">
         <div className="max-w-7xl mx-auto text-center">
           <h1 className="text-5xl md:text-7xl font-bold mb-6 bg-gradient-to-r from-blue-600 via-sky-500 to-indigo-600 bg-clip-text text-transparent">
@@ -64,7 +70,6 @@ export default function Home() {
             imagination. The future of travel is here.
           </p>
 
-          {/* Search Bar */}
           <div className="max-w-3xl mx-auto bg-white/70 backdrop-blur-md rounded-full p-2 border border-blue-300/50 shadow-xl">
             <div className="flex items-center space-x-10">
               <div className="flex-1 flex items-center space-x-2 px-3 m-0">
@@ -75,8 +80,8 @@ export default function Home() {
                   onChange={(e) => setLocation(e.target.value)}
                   onKeyDown={(e) => {
                     if (e.key === 'Enter') {
-                      e.preventDefault(); // optional, stops default form behavior
-                      handleSearch(); // calls your async search function
+                      e.preventDefault();
+                      handleSearch();
                     }
                   }}
                   className="border-0 bg-transparent text-gray-900 placeholder-gray-500 focus:ring-0 w-full"
@@ -84,14 +89,15 @@ export default function Home() {
               </div>
 
               <div className="flex-1 flex items-center space-x-2 px-3 m-0 border-l border-gray-300">
+                <Plane className="h-5 w-5 text-blue-600" />
                 <input
                   placeholder="Where do you want to explore ?"
                   value={prompt}
                   onChange={(e) => setPrompt(e.target.value)}
                   onKeyDown={(e) => {
                     if (e.key === 'Enter') {
-                      e.preventDefault(); // optional, stops default form behavior
-                      handleSearch(); // calls your async search function
+                      e.preventDefault();
+                      handleSearch();
                     }
                   }}
                   className="border-0 bg-transparent text-gray-900 placeholder-gray-500 focus:ring-0 w-full"
