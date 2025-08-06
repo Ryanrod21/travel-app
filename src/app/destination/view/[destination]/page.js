@@ -9,26 +9,23 @@ import { useParams } from 'next/navigation';
 export default function DestinationViewPage() {
   const { destination: destinationParam } = useParams(); // 👈 get it from URL
   const decodedName = decodeURIComponent(destinationParam);
+  const { user, loading, updateUserDestinations } = useAuth();
 
   const [destination, setDestination] = useState(null);
-  const [images, setImages] = useState([]);
+  const [destinationImages, setDestinationImages] = useState([]);
   const [mainImage, setMainImage] = useState(null);
-  const { user, loading, updateUserDestinations } = useAuth();
+
+  const [images, setImages] = useState([]);
+  const [mainFoodImage, setMainFoodImage] = useState(null);
+
+  const [hotelImage, setHotelImage] = useState([]);
+  const [mainHotelImage, setMainHotelImage] = useState(null);
+
   const [hovered, setHovered] = useState(false);
   const router = useRouter();
 
-  useEffect(() => {
-    const saved = localStorage.getItem('selectedDestination');
-    if (saved) {
-      const parsed = JSON.parse(saved);
-      if (parsed.name === decodedName) {
-        setDestination(parsed);
-        fetchUnsplashImages(decodedName);
-      }
-    }
-  }, [decodedName]);
-
-  async function fetchUnsplashImages(query) {
+  // 👇 ADD THESE TWO FUNCTIONS RIGHT HERE
+  async function fetchDestinationImage(query) {
     try {
       const res = await fetch(
         `https://api.unsplash.com/search/photos?query=${encodeURIComponent(
@@ -36,27 +33,73 @@ export default function DestinationViewPage() {
         )}&per_page=5&client_id=${process.env.NEXT_PUBLIC_UNSPLASH_ACCESS_KEY}`
       );
 
-      if (!res.ok) {
-        console.error('Unsplash API returned error status:', res.status);
-        setImages([]);
-        return;
-      }
-
       const data = await res.json();
-
-      if (!data.results) {
-        console.error('No results field in Unsplash response:', data);
-        setImages([]);
-        return;
+      if (data.results?.length > 0) {
+        setMainImage(data.results[0].urls.regular); // first image as main
+        setDestinationImages(data.results.map((img) => img.urls.regular)); // all for thumbnails
+      } else {
+        console.warn('No destination images found');
       }
-
-      setImages(data.results.map((img) => img.urls.regular));
-      setMainImage(data.results[0].urls.regular);
     } catch (error) {
-      console.error('Failed to fetch Unsplash images', error);
-      setImages([]);
+      console.error('Error fetching destination image:', error);
     }
   }
+
+  async function fetchFoodImages(query) {
+    try {
+      const res = await fetch(
+        `https://api.unsplash.com/search/photos?query=${encodeURIComponent(
+          query + ' food'
+        )}&per_page=5&client_id=${process.env.NEXT_PUBLIC_UNSPLASH_ACCESS_KEY}`
+      );
+
+      const data = await res.json();
+      if (data.results?.length > 0) {
+        const urls = data.results.map((img) => img.urls.regular);
+        setImages(urls);
+        setMainFoodImage(urls[0]); // ← this sets the first food image as the main
+      } else {
+        console.warn('No food images found');
+      }
+    } catch (error) {
+      console.error('Error fetching food images:', error);
+    }
+  }
+
+  async function fetchHotelImages(query) {
+    try {
+      const res = await fetch(
+        `https://api.unsplash.com/search/photos?query=${encodeURIComponent(
+          query + ' hotel'
+        )}&per_page=5&client_id=${process.env.NEXT_PUBLIC_UNSPLASH_ACCESS_KEY}`
+      );
+
+      const data = await res.json();
+      if (data.results?.length > 0) {
+        const urls = data.results.map((img) => img.urls.regular);
+        setHotelImage(urls);
+        setMainHotelImage(urls[0]); // ← this sets the first food image as the main
+      } else {
+        console.warn('No food images found');
+      }
+    } catch (error) {
+      console.error('Error fetching food images:', error);
+    }
+  }
+
+  // 👇 Then your useEffect comes after
+  useEffect(() => {
+    const saved = localStorage.getItem('selectedDestination');
+    if (saved) {
+      const parsed = JSON.parse(saved);
+      if (parsed.name === decodedName) {
+        setDestination(parsed);
+        fetchDestinationImage(parsed.name); // Get destination image
+        fetchFoodImages(parsed.name); // Get food images
+        fetchHotelImages(parsed.name);
+      }
+    }
+  }, [decodedName]);
 
   // Determine if bookmarked:
   const isBookmarked =
@@ -128,11 +171,11 @@ export default function DestinationViewPage() {
         )}
 
         <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-4 mb-10">
-          {images.map((url, i) => (
+          {destinationImages.map((url, i) => (
             <img
               key={i}
               src={url}
-              alt={`Thumbnail ${i}`}
+              alt={`Destination Image ${i}`}
               onClick={() => setMainImage(url)}
               className={`rounded-lg object-cover w-full h-28 cursor-pointer shadow-md hover:scale-105 transition-transform duration-200 ${
                 mainImage === url ? 'ring-4 ring-blue-500' : ''
@@ -141,16 +184,78 @@ export default function DestinationViewPage() {
           ))}
         </div>
 
+        <h3 className="text-3xl font-bold text-left mb-4 text-blue-700">
+          Popular Local Foods
+        </h3>
+
+        {mainFoodImage && (
+          <img
+            className="object-cover rounded-lg w-full h-[800px] mb-6 transition duration-300 shadow-lg"
+            src={mainFoodImage}
+            alt="Selected Food"
+          />
+        )}
+
+        <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-4 mb-10">
+          {images.map((url, i) => (
+            <img
+              key={i}
+              src={url}
+              alt={`Food ${i}`}
+              onClick={() => setMainFoodImage(url)}
+              className={`rounded-lg object-cover w-full h-28 cursor-pointer  shadow-md hover:scale-105 transition-transform duration-200 ${
+                mainFoodImage === url ? 'ring-4 ring-blue-500' : ''
+              }`}
+            />
+          ))}
+        </div>
+        <p className="text-gray-700 text-2xl mb-4">{destination.food}</p>
+
+        <h3 className="text-3xl font-bold text-left mb-6 text-blue-700">
+          Local Hotels
+        </h3>
+
+        {mainHotelImage && (
+          <img
+            className="object-cover rounded-lg w-full h-[800px] mb-6 transition duration-300 shadow-lg"
+            src={mainHotelImage}
+            alt="Selected Hotel"
+          />
+        )}
+
+        <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-4 mb-10">
+          {hotelImage.map((url, i) => (
+            <img
+              key={i}
+              src={url}
+              alt={`Hotel ${i}`}
+              onClick={() => setMainHotelImage(url)}
+              className={`rounded-lg object-cover w-full h-28 cursor-pointer shadow-md hover:scale-105 transition-transform duration-200 ${
+                mainHotelImage === url ? 'ring-4 ring-blue-500' : ''
+              }`}
+            />
+          ))}
+        </div>
+        <p className="text-gray-700 text-2xl mb-6">{destination.hotel}</p>
+
         <div className="flex flex-col justify-between items-start mb-3 mt-5 w-full">
+          <h3 className="text-3xl font-bold text-left mb-4 text-blue-700">
+            More about {destination.name}
+          </h3>
           <p className="text-gray-700 text-2xl mb-4">
             {destination.description}
           </p>
-          <p className="text-gray-700 text-2xl mb-4">{destination.food}</p>
           <p className="text-gray-700 text-2xl mb-4">
             {destination.activities}
           </p>
           <p className="text-gray-700 text-2xl mb-4">{destination.history}</p>
           <p className="text-gray-700 text-2xl mb-4">{destination.sports}</p>
+        </div>
+
+        <div className="flex flex-col justify-between items-start mb-3 mt-5 w-full">
+          <h3 className="text-3xl font-bold text-left mb-4 text-blue-700">
+            Flight Time
+          </h3>
           <p className="text-gray-700 text-2xl mb-4">{destination.travel}</p>
         </div>
 

@@ -19,7 +19,7 @@ export const AuthProvider = ({ children }) => {
           setUser({
             uid: currentUser.uid,
             email: currentUser.email,
-            name: userDoc.data().name, // 🔥 add name from Firestore
+            name: userDoc.data().name,
           });
         } else {
           setUser(currentUser);

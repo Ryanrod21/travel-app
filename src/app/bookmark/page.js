@@ -3,7 +3,7 @@
 import { useAuth } from '@/app/context/authcontext';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
-import { doc, getDoc } from 'firebase/firestore';
+import { doc, getDoc, updateDoc } from 'firebase/firestore';
 import { db } from '@/app/firebase/firebaseConfig';
 
 export default function BookmarksPage() {
@@ -27,6 +27,23 @@ export default function BookmarksPage() {
 
     fetchDestinations();
   }, [user?.uid]);
+
+  const removeDestination = async (destinationToRemove) => {
+    if (!user?.uid) return;
+
+    const updatedDestinations = destinations.filter(
+      (dest) => dest.name !== destinationToRemove.name
+    );
+
+    // Update Firestore
+    const userRef = doc(db, 'users', user.uid);
+    await updateDoc(userRef, {
+      destinations: updatedDestinations,
+    });
+
+    // Update local state
+    setDestinations(updatedDestinations);
+  };
 
   if (loading || fetching)
     return <p className="p-8 text-xl">Loading your bookmarks...</p>;
@@ -71,12 +88,20 @@ export default function BookmarksPage() {
                   <p className="text-sm text-gray-600 mt-1 line-clamp-3">
                     {destination.description || 'No description available.'}
                   </p>
-                  <button
-                    onClick={() => handleBookJourney(destination)}
-                    className="mt-4 inline-block bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition"
-                  >
-                    Book Journey
-                  </button>
+                  <div className="mt-4 flex gap-2">
+                    <button
+                      onClick={() => handleBookJourney(destination)}
+                      className="bg-blue-500 text-white cursor-pointer px-4 py-2 rounded hover:bg-blue-600 transition"
+                    >
+                      Book Journey
+                    </button>
+                    <button
+                      onClick={() => removeDestination(destination)}
+                      className="bg-red-500 text-white cursor-pointer px-4 py-2 rounded hover:bg-red-600 transition"
+                    >
+                      Remove
+                    </button>
+                  </div>
                 </div>
               </div>
             ))}

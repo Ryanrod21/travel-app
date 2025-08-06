@@ -47,11 +47,12 @@ export async function POST(request) {
     "country": "Japan",
     "description": "Capital city known for ...",
     "highlights": ["Shibuya Crossing", "Tokyo Tower", "Senso-ji Temple"],
-    "food": "Some of the best food is also name the best dish they have ...",
+    "food": "Some of the best restaurants name...",
     "activities": "Here are some things you can do ...",
     "history": "History on the destination...,
     "sports": "If they have a major sports team name them all and say what they are and play, if not don't say antying...",
     "travel": "Fastest way to get there from the user's location and approximate travel time"
+    "hotel": "Can you name some best and local hotels....
     }
 ]
 

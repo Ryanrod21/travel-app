@@ -28,6 +28,15 @@ export default function Navbar() {
     };
   }, []);
 
+  const handleLogout = async () => {
+    try {
+      await logoutUser();
+      router.push('/log-in'); // redirect to login or home
+    } catch (error) {
+      console.error('Logout failed:', error);
+    }
+  };
+
   return (
     <nav className="fixed top-0 w-full z-50 bg-white/80 backdrop-blur-md border-b border-blue-200/50 shadow-lg">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -40,16 +49,13 @@ export default function Navbar() {
           </Link>
 
           <div className="hidden md:flex items-center space-x-8">
-            <a
+            {/* <a
               href="#destinations"
               className="hover:text-blue-600 transition-colors text-gray-700"
             >
               Destinations
-            </a>
-            <a
-              href="#map"
-              className="hover:text-blue-600 transition-colors text-gray-700"
-            >
+            </a> */}
+            <a className="hover:text-blue-600 transition-colors text-gray-700">
               Explore
             </a>
             <a
@@ -58,9 +64,9 @@ export default function Navbar() {
             >
               About
             </a>
-            <button className="px-4 py-2 border border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white bg-transparent rounded-md transition-colors">
+            {/* <button className="px-4 py-2 border border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white bg-transparent rounded-md transition-colors">
               Book Now
-            </button>
+            </button> */}
 
             {user && (
               <button
@@ -109,12 +115,20 @@ export default function Navbar() {
                     </a>
                   )}
                   {user && (
-                    <a
-                      href="/profile"
-                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                    >
-                      Profile
-                    </a>
+                    <>
+                      <a
+                        href={`/user/${user.uid}`}
+                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                      >
+                        Profile
+                      </a>
+                      <a
+                        onClick={() => handleLogout}
+                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                      >
+                        Log Out
+                      </a>
+                    </>
                   )}
                 </div>
               )}
@@ -138,7 +152,7 @@ export default function Navbar() {
       {isMenuOpen && (
         <div className="md:hidden bg-white/95 backdrop-blur-md shadow-lg">
           <div className="px-2 pt-2 pb-3 space-y-1">
-            <a
+            {/* <a
               href="#destinations"
               className="block px-3 py-2 hover:text-blue-600 text-gray-700"
             >
@@ -149,7 +163,7 @@ export default function Navbar() {
               className="block px-3 py-2 hover:text-blue-600 text-gray-700"
             >
               Explore
-            </a>
+            </a> */}
             <a
               href="#about"
               className="block px-3 py-2 hover:text-blue-600 text-gray-700"
