@@ -105,7 +105,7 @@ export default function Navbar() {
               </div>
 
               {dropdown && (
-                <div className="absolute left-0 top-5 mt-2 w-32 bg-white border border-gray-200 rounded shadow-lg z-10">
+                <div className="absolute right-0 top-5 mt-2 w-32 bg-white border border-gray-200 rounded shadow-lg z-10">
                   {!user && (
                     <a
                       href="/log-in"
