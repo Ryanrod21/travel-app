@@ -6,6 +6,20 @@ import { db } from '@/app/firebase/firebaseConfig';
 import { doc, updateDoc, arrayUnion } from 'firebase/firestore';
 import { useParams } from 'next/navigation';
 import { Plane } from 'lucide-react';
+import 'react-datepicker/dist/react-datepicker.css';
+import DatePicker from 'react-datepicker';
+
+function formatDate(date) {
+  return new Date(date).toLocaleDateString('en-US', {
+    year: 'numeric',
+    month: 'short',
+    day: 'numeric',
+  });
+}
+
+function generateId() {
+  return Math.random().toString(36).substr(2, 9);
+}
 
 export default function Checkout() {
   const { user, loading } = useAuth();
@@ -16,6 +30,9 @@ export default function Checkout() {
   const [saving, setSaving] = useState(false);
   const [success, setSuccess] = useState(false);
   const [confirmed, setConfirmed] = useState(false);
+  const [flightDate, setFlightDate] = useState(null);
+  const [returnDate, setReturnDate] = useState(null);
+  const [errorMessage, setErrorMessage] = useState('');
 
   const decodedName = decodeURIComponent(checkoutDestination);
 
@@ -48,28 +65,37 @@ export default function Checkout() {
   async function handleCheckout() {
     if (!user || !selectedDestination) return;
 
+    // ✅ Validate first
+    if (!flightDate || !returnDate) {
+      setErrorMessage('Please select both flight and return dates.');
+      return;
+    }
+
+    setErrorMessage(''); // Clear any previous errors
     setSaving(true);
     setConfirmed(true);
 
     try {
-      setSaving(true);
-
       const userDocRef = doc(db, 'users', user.uid);
 
       await updateDoc(userDocRef, {
         recentDestinations: arrayUnion({
           ...selectedDestination,
+          id: generateId(), // <-- Unique ID added here
           timestamp: new Date().toISOString(),
+          flightDate: flightDate.toISOString(),
+          returnDate: returnDate.toISOString(),
         }),
       });
 
-      // Wait before showing success message
       setTimeout(() => {
         setSuccess(true);
         setSaving(false);
-      }, 1800); // 1.8 seconds delay
+      }, 1800);
     } catch (error) {
       console.error('Error saving to Firestore:', error);
+      setConfirmed(false);
+      setErrorMessage('Something went wrong. Please try again.');
     } finally {
       setSaving(false);
     }
@@ -106,7 +132,40 @@ export default function Checkout() {
             </div>
           )}
 
-          <div className="flex justify-center items-center space-x-3">
+          {!confirmed && (
+            <div className="flex flex-col items-center gap-4 mb-8">
+              <div className="flex flex-col md:flex-row items-center gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Flight Date
+                  </label>
+                  <DatePicker
+                    selected={flightDate}
+                    onChange={(date) => setFlightDate(date)}
+                    dateFormat="yyyy-MM-dd"
+                    className="border border-gray-300 rounded px-3 py-2"
+                    placeholderText="Select flight date"
+                    minDate={new Date()} // ⛔ Prevent past dates
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Return Date
+                  </label>
+                  <DatePicker
+                    selected={returnDate}
+                    onChange={(date) => setReturnDate(date)}
+                    dateFormat="yyyy-MM-dd"
+                    className="border border-gray-300 rounded px-3 py-2"
+                    placeholderText="Select return date"
+                    minDate={flightDate || new Date()} // ⛔ Can't return before flight
+                  />
+                </div>
+              </div>
+            </div>
+          )}
+
+          <div className="flex flex-col items-center space-y-2">
             {!confirmed && (
               <button
                 onClick={handleCheckout}
@@ -118,13 +177,25 @@ export default function Checkout() {
             )}
 
             {confirmed && !success && (
-              <Plane className="h-8 w-8 text-blue-600 animate-pulse-left-to-right" />
+              <Plane className="h-12 w-12 text-blue-600 animate-pulse" />
             )}
 
             {success && (
               <p className="mt-4 text-green-600 font-medium">
-                Destination saved to your recent trips!
+                Trip to{' '}
+                <span className="font-bold">{selectedDestination.name}, </span>
+                <span className="font-bold">{selectedDestination.country}</span>
+                confirmed!
+                <span className="font-bold">
+                  {formatDate(flightDate)}
+                </span> to{' '}
+                <span className="font-bold">{formatDate(returnDate)}</span>!
               </p>
+            )}
+
+            {/* ✅ Error Message */}
+            {errorMessage && (
+              <p className="text-red-600 text-sm font-medium">{errorMessage}</p>
             )}
           </div>
         </div>

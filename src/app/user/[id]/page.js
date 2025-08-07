@@ -29,16 +29,20 @@ export default function UserProfile() {
   const removedDestination = async (destinationToRemove) => {
     if (!user?.uid) return;
 
-    const updateRecentDestinations = recentDestination.filter(
-      (dest) => dest.name !== destinationToRemove.name
+    const updatedDestinations = recentDestination.filter(
+      (dest) => dest.id !== destinationToRemove.id // ✅ Compare by ID
     );
 
     const userRef = doc(db, 'users', user.uid);
-    await updateDoc(userRef, {
-      recentDestination: updateRecentDestinations,
-    });
+    try {
+      await updateDoc(userRef, {
+        recentDestinations: updatedDestinations,
+      });
 
-    setRecentDestination(updateRecentDestinations);
+      setRecentDestination(updatedDestinations); // ✅ Update local state
+    } catch (error) {
+      console.error('Error removing destination:', error);
+    }
   };
 
   // Function to update rating locally and in Firestore
@@ -85,9 +89,9 @@ export default function UserProfile() {
 
         {recentDestination.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {recentDestination.map((dest, index) => (
+            {recentDestination.map((dest) => (
               <div
-                key={index}
+                key={dest.id}
                 className="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition"
               >
                 {dest.image && (
@@ -116,9 +120,9 @@ export default function UserProfile() {
                     </button>
                   </div>
                   <DestinationRatings
-                    key={index}
+                    key={dest.id}
                     destination={dest}
-                    onRate={(rating) => updateRating(index, rating)}
+                    onRate={(rating) => updateRating(dest.id, rating)}
                   />
                 </div>
               </div>
