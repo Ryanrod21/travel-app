@@ -45,27 +45,24 @@ export default function UserProfile() {
     }
   };
 
-  // Function to update rating locally and in Firestore
-  const updateRating = async (destIndex, rating) => {
-    // Clone the array to avoid direct mutation
-    const updatedDestinations = [...recentDestination];
+  const updateRating = async (destId, rating) => {
+    const updatedDestinations = recentDestination.map((dest) =>
+      dest.id === destId ? { ...dest, rating } : dest
+    );
 
-    // Add/update rating property on the specific destination
-    updatedDestinations[destIndex] = {
-      ...updatedDestinations[destIndex],
-      rating,
-    };
+    console.log('✅ Final updatedDestinations array:', updatedDestinations);
 
-    // Update state immediately for UI feedback
     setRecentDestination(updatedDestinations);
 
-    // Update Firestore
     if (user?.uid) {
       const userRef = doc(db, 'users', user.uid);
       try {
-        await updateDoc(userRef, { recentDestinations: updatedDestinations });
+        await updateDoc(userRef, {
+          recentDestinations: updatedDestinations,
+        });
+        console.log('✅ Successfully updated rating in Firestore');
       } catch (error) {
-        console.error('Failed to update rating in Firestore:', error);
+        console.error('❌ Error saving rating:', error);
       }
     }
   };

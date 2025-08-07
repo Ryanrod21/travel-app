@@ -26,6 +26,7 @@ export async function POST(request) {
   const body = await request.json();
   const prompt = body.prompt;
   const location = body.location;
+  // const top = body.top || 10;
 
   if (!prompt) {
     return new Response(JSON.stringify({ error: 'Prompt is required' }), {
@@ -62,6 +63,10 @@ Do not include any explanation, extra text, or formatting outside the JSON. If y
           role: 'user',
           content: `User is interested in traveling to ${prompt}. The user is currently located in ${location}. Include the best travel method and estimated travel time for each destination.`,
         },
+        // {
+        //   role: 'user',
+        //   content: `Please return the top ${top} most visited travel destinations worldwide as a JSON array. Include name, country, description, highlights, food, activities, history, sports, travel method, and hotels.`,
+        // },
       ],
       temperature: 0,
     });

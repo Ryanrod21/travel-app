@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { doc, getDoc, updateDoc } from 'firebase/firestore';
 import { db } from '@/app/firebase/firebaseConfig';
+import { Plane, Map, Trash2 } from 'lucide-react';
 
 export default function BookmarksPage() {
   const { user, loading } = useAuth();
@@ -91,14 +92,27 @@ export default function BookmarksPage() {
                   <div className="mt-4 flex gap-2">
                     <button
                       onClick={() => handleBookJourney(destination)}
-                      className="bg-blue-500 text-white cursor-pointer px-4 py-2 rounded hover:bg-blue-600 transition"
+                      className="cursor-pointer px-4 py-2 bg-gradient-to-r from-blue-500 to-indigo-500 hover:from-blue-600 hover:to-indigo-600 text-white rounded-md transition-all flex items-center justify-center"
                     >
+                      <Map className="h-4 w-4 mr-2" />
+                      Visit Journey
+                    </button>
+                    <button
+                      onClick={() =>
+                        router.push(
+                          `/checkout/${encodeURIComponent(destination.name)}`
+                        )
+                      }
+                      className="cursor-pointer px-4 py-2 bg-gradient-to-r from-blue-500 to-indigo-500 hover:from-blue-600 hover:to-indigo-600 text-white rounded-md transition-all flex items-center justify-center"
+                    >
+                      <Plane className="h-4 w-4 mr-2" />
                       Book Journey
                     </button>
                     <button
                       onClick={() => removeDestination(destination)}
-                      className="bg-red-500 text-white cursor-pointer px-4 py-2 rounded hover:bg-red-600 transition"
+                      className="bg-red-500 text-white cursor-pointer px-4 py-2 rounded hover:bg-red-600 transition flex items-center justify-center"
                     >
+                      <Trash2 className="h-4 w-4 mr-2" />
                       Remove
                     </button>
                   </div>

@@ -170,7 +170,7 @@ export default function Checkout() {
               <button
                 onClick={handleCheckout}
                 disabled={saving}
-                className="px-6 py-3 bg-blue-600 text-white rounded-full hover:bg-blue-700 transition"
+                className="px-6 py-3 bg-blue-600 text-white rounded-full cursor-pointer hover:bg-blue-700 transition"
               >
                 Confirm Checkout
               </button>
@@ -181,22 +181,22 @@ export default function Checkout() {
             )}
 
             {success && (
-              <p className="mt-4 text-green-600 font-medium">
+              <p className="mt-4 text-green-600 font-medium text-2xl">
                 Trip to{' '}
                 <span className="font-bold">{selectedDestination.name}, </span>
-                <span className="font-bold">{selectedDestination.country}</span>
-                confirmed!
                 <span className="font-bold">
-                  {formatDate(flightDate)}
-                </span> to{' '}
+                  {selectedDestination.country}
+                </span>{' '}
+                confirmed!{' '}
+                <span className="font-bold">{formatDate(flightDate)}</span> to{' '}
                 <span className="font-bold">{formatDate(returnDate)}</span>!
               </p>
             )}
 
             {/* ✅ Error Message */}
-            {errorMessage && (
-              <p className="text-red-600 text-sm font-medium">{errorMessage}</p>
-            )}
+            {/* {errorMessage && ( */}
+            <p className="text-red-600 text-sm font-medium">{errorMessage}</p>
+            {/* )} */}
           </div>
         </div>
       </section>
