@@ -55,7 +55,10 @@ export default function Navbar() {
             >
               Destinations
             </a> */}
-            <a className="hover:text-blue-600 transition-colors text-gray-700">
+            <a
+              href="/explore"
+              className="hover:text-blue-600 transition-colors text-gray-700"
+            >
               Explore
             </a>
             <a
