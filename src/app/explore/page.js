@@ -54,10 +54,11 @@ export default function ExplorePage() {
     fetchTop();
   }, []);
 
-  // Dummy handlers for buttons — replace with your logic
   const handleBookJourney = (destination) => {
-    console.log('Visit journey:', destination);
+    localStorage.setItem('selectedDestination', JSON.stringify(destination));
+    router.push(`/destination/view/${encodeURIComponent(destination.name)}`);
   };
+
 
   if (loading)
     return (

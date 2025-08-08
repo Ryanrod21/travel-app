@@ -65,7 +65,7 @@ Do NOT include any explanation, markdown, or text outside this JSON. If you cann
     userMessage =
       'Return the top 10 most visited travel destinations worldwide in the required JSON format.';
   } else {
-    userMessage = `User is interested in traveling to ${prompt}. The user is currently located in ${location}. Include the best travel method and estimated travel time for each destination.`;
+    userMessage = `User is interested in traveling to ${prompt}. You can give up to 12 related to prompt. The user is currently located in ${location}. Include the best travel method and estimated travel time for each destination.`;
   }
 
   try {
