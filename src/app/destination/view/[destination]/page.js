@@ -121,7 +121,6 @@ export default function DestinationViewPage() {
 
   async function toggleBookmark() {
     if (!user) {
-      alert('You need to be logged in to bookmark destinations.');
       return;
     }
 
@@ -138,11 +137,8 @@ export default function DestinationViewPage() {
       }
 
       await updateUserDestinations(newDestinations);
-
-      alert(isBookmarked ? 'Bookmark removed!' : 'Destination bookmarked!');
     } catch (error) {
       console.error('Error toggling bookmark:', error);
-      alert('Failed to update bookmark. Try again.');
     }
   }
 
@@ -277,21 +273,39 @@ export default function DestinationViewPage() {
           </div>
 
           <div className="flex flex-col gap-5">
-            <button
-              onClick={toggleBookmark}
-              onMouseEnter={() => setHovered(true)}
-              onMouseLeave={() => setHovered(false)}
-              className={`cursor-pointer w-95 h-12 px-4 py-2 rounded-md transition-all flex items-center justify-center
+            {user && (
+              <button
+                onClick={toggleBookmark}
+                onMouseEnter={() => setHovered(true)}
+                onMouseLeave={() => setHovered(false)}
+                className={`cursor-pointer w-95 h-12 px-4 py-2 rounded-md transition-all flex items-center justify-center
               ${
                 isBookmarked
                   ? 'bg-green-600 hover:bg-red-600 text-white'
                   : 'bg-blue-500 hover:bg-indigo-600 text-white'
               }
               `}
-            >
-              <Icon className="mr-2" />
-              {label}
-            </button>
+              >
+                <Icon className="mr-2" />
+                {label}
+              </button>
+            )}
+
+            {!user && (
+              <button
+                onClick={() => router.push('/register')}
+                className={`cursor-pointer w-95 h-12 px-4 py-2 rounded-md transition-all flex items-center justify-center
+              ${
+                isBookmarked
+                  ? 'bg-green-600 hover:bg-red-600 text-white'
+                  : 'bg-blue-500 hover:bg-indigo-600 text-white'
+              }
+              `}
+              >
+                <Icon className="mr-2" />
+                Register Now to Save Your Trips !!!
+              </button>
+            )}
 
             <button
               onClick={() =>

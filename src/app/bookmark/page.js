@@ -86,9 +86,26 @@ export default function BookmarksPage() {
                   <h2 className="text-xl font-semibold text-blue-600">
                     {destination.name}, {destination.country}
                   </h2>
-                  <p className="text-sm text-gray-600 mt-1 line-clamp-3">
+                  <p className="text-gray-700 text-sm mb-4">
                     {destination.description || 'No description available.'}
                   </p>
+
+                  <div className="mb-4">
+                    <h4 className="text-sm font-semibold text-blue-600 mb-2">
+                      Highlights:
+                    </h4>
+                    <div className="flex flex-wrap gap-1">
+                      {destination.highlights.map((highlight, idx) => (
+                        <div
+                          key={idx}
+                          className="px-2 py-1 text-xs rounded-full bg-gradient-to-r from-blue-500 to-indigo-500 text-white font-medium shadow"
+                        >
+                          {highlight}
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
                   <div className="mt-4 flex gap-2">
                     <button
                       onClick={() => handleBookJourney(destination)}

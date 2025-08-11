@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { useState, useEffect, useRef } from 'react';
 import { useAuth } from '@/app/context/authcontext';
 import { useRouter } from 'next/navigation';
+import { logoutUser } from '@/app/firebase/auth';
 
 export default function Navbar() {
   const { user, loading } = useAuth();
@@ -126,8 +127,8 @@ export default function Navbar() {
                         Profile
                       </a>
                       <a
-                        onClick={() => handleLogout}
-                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                        onClick={() => handleLogout()}
+                        className="block px-4 py-2 text-sm cursor-pointer text-gray-700 hover:bg-gray-100"
                       >
                         Log Out
                       </a>

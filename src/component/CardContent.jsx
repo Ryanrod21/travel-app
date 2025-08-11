@@ -23,9 +23,6 @@ export default function CardContent({ area }) {
               </h3>
               <p className="text-blue-600 text-sm">{destination.country}</p>
             </div>
-            {/* <div className="text-right">
-              <p className="text-gray-600 text-sm">per person</p>
-            </div> */}
           </div>
 
           <p className="text-gray-700 text-sm mb-4">
