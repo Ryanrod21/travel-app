@@ -12,13 +12,13 @@ export default function AboutPage() {
               Welcome to <strong>FutureTravels</strong> — your trusted companion on the journey to discovering the perfect destination.
             </p>
             <p>
-              This app was created with a simple mission: to help you find exactly what you're looking for. Whether it’s a country steeped in history, exciting activities, delicious local cuisines, or thrilling sports, FutureTravels is designed to guide you every step of the way.
+              This app was created with a simple mission: to help you find exactly what you're looking for. Whether it's a country steeped in history, exciting activities, delicious local cuisines, or thrilling sports, FutureTravels is designed to guide you every step of the way.
             </p>
             <p>
-              Our powerful search feature makes it easy and inspiring to uncover your next dream trip. No matter the kind of experience you desire, we’re here to help you explore, discover, and create unforgettable memories.
+              Our powerful search feature makes it easy and inspiring to uncover your next dream trip. No matter the kind of experience you desire, we're here to help you explore, discover, and create unforgettable memories.
             </p>
             <p>
-              Thank you for choosing FutureTravels. Let’s embark on this adventure together and explore the world like never before!
+              Thank you for choosing FutureTravels. Let's embark on this adventure together and explore the world like never before!
             </p>
           </div>
         </div>

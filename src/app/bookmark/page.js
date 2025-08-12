@@ -6,6 +6,7 @@ import { useEffect, useState } from 'react';
 import { doc, getDoc, updateDoc } from 'firebase/firestore';
 import { db } from '@/app/firebase/firebaseConfig';
 import { Plane, Map, Trash2 } from 'lucide-react';
+import Image from 'next/image';
 
 export default function BookmarksPage() {
   const { user, loading } = useAuth();
@@ -76,7 +77,7 @@ export default function BookmarksPage() {
                 className="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition"
               >
                 {destination.image && (
-                  <img
+                  <Image
                     src={destination.image}
                     alt={destination.name}
                     className="w-full h-48 object-cover"
