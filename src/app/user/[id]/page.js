@@ -5,6 +5,7 @@ import { useAuth } from '@/app/context/authcontext';
 import { doc, getDoc, updateDoc } from 'firebase/firestore';
 import { db } from '@/app/firebase/firebaseConfig';
 import DestinationRatings from '@/component/Rate';
+import Image from 'next/image';
 
 export default function UserProfile() {
   const { user, loading } = useAuth();
@@ -92,7 +93,7 @@ export default function UserProfile() {
                 className="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition"
               >
                 {dest.image && (
-                  <img
+                  <Image
                     src={dest.image}
                     alt={dest.name}
                     className="w-full h-48 object-cover"

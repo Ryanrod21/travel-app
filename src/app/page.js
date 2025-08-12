@@ -8,11 +8,10 @@ import Paris from '../../public/Paris.jpg';
 import Food from '../../public/food.jpg'
 import { ArrowBigRight } from 'lucide-react';
 import { useRouter } from 'next/navigation';
+import React from 'react';
 
 export default function LandingPage() {
-  
-  const router = useRouter()
-
+  const router = useRouter();
 
   // All blocks in one array for scalability
   const sections = [
@@ -42,8 +41,16 @@ export default function LandingPage() {
     },
   ];
 
-  // Create refs for heading + each section
-  const refs = Array.from({ length: sections.length + 1 }, () => useRef(null));
+  // Use one ref to hold an array of refs for heading + sections
+  const refs = useRef([]);
+
+  // Initialize refs only once
+  if (refs.current.length !== sections.length + 1) {
+    refs.current = Array(sections.length + 1)
+      .fill(null)
+      .map(() => React.createRef());
+  }
+
   const [visible, setVisible] = useState(Array(sections.length + 1).fill(false));
 
   useEffect(() => {
@@ -61,7 +68,7 @@ export default function LandingPage() {
       { threshold: 0.3 }
     );
 
-    refs.forEach((ref) => {
+    refs.current.forEach((ref) => {
       if (ref.current) observer.observe(ref.current);
     });
 
@@ -72,7 +79,7 @@ export default function LandingPage() {
     <div className="flex flex-col items-center space-y-32 py-20 bg-gradient-to-br from-blue-50 via-sky-50 to-indigo-50">
       {/* Heading */}
       <div
-        ref={refs[0]}
+        ref={refs.current[0]}
         data-index="0"
         className="transition-all duration-1000 ease-out transform text-center pt-14 flex flex-col gap-3 "
       >
@@ -93,11 +100,11 @@ export default function LandingPage() {
       {/* Sections */}
       {sections.map((section, i) => {
         const imageFromLeft = section.imageFrom === 'left';
-        const index = i + 1; // because heading is at 0
+        const index = i + 1; // heading is at 0
         return (
           <div
             key={i}
-            ref={refs[index]}
+            ref={refs.current[index]}
             data-index={index}
             className={`flex flex-col md:flex-row ${imageFromLeft ? '' : 'md:flex-row-reverse'} items-center gap-12`}
           >
@@ -133,9 +140,11 @@ export default function LandingPage() {
           </div>
         );
       })}
-      <button className="cursor-pointer w-95 h-12 px-4 py-2 bg-gradient-to-r from-blue-500 to-indigo-500 hover:from-blue-600 hover:to-indigo-600 text-white rounded-md transition-all flex items-center justify-center"
-        onClick={() => router.push('/home')}>
-        Star Your Journey Now 
+      <button
+        className="cursor-pointer w-95 h-12 px-4 py-2 bg-gradient-to-r from-blue-500 to-indigo-500 hover:from-blue-600 hover:to-indigo-600 text-white rounded-md transition-all flex items-center justify-center"
+        onClick={() => router.push('/home')}
+      >
+        Start Your Journey Now
         <ArrowBigRight className="h-7 w-8 mr-2" />
       </button>
     </div>
