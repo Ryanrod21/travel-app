@@ -42,7 +42,7 @@ export default function Navbar() {
     <nav className="fixed top-0 w-full z-50 bg-white/80 backdrop-blur-md border-b border-blue-200/50 shadow-lg">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
-          <Link href="/" className="flex items-center space-x-2">
+          <Link href="/home" className="flex items-center space-x-2">
             <Globe className="h-8 w-8 text-blue-500" />
             <span className="text-xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
               FutureTravel
@@ -63,7 +63,7 @@ export default function Navbar() {
               Explore
             </a>
             <a
-              href="#about"
+              href="/about"
               className="hover:text-blue-600 transition-colors text-gray-700"
             >
               About
