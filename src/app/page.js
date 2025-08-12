@@ -30,13 +30,13 @@ export default function LandingPage() {
     {
       image: Paris,
       alt: 'Mountain hiking adventure',
-      text: `Embark on unforgettable adventures and discover the destinations of your dreams. From breathtaking natural wonders to the world’s most iconic landmarks, explore every corner of the globe and create memories that will last a lifetime.`,
+      text: `Embark on unforgettable adventures and discover the destinations of your dreams. From breathtaking natural wonders to the world's most iconic landmarks, explore every corner of the globe and create memories that will last a lifetime.`,
       imageFrom: 'left',
     },
     {
       image: Food,
       alt: 'A table of Food',
-      text: 'Visit your destination to embark on a delicious journey discovering authentic foods and flavors unique to each country’s culture. Savor traditional dishes, explore vibrant markets, and immerse yourself in the rich culinary heritage that makes every meal a memorable experience.',
+      text: `Visit your destination to embark on a delicious journey discovering authentic foods and flavors unique to each country's culture. Savor traditional dishes, explore vibrant markets, and immerse yourself in the rich culinary heritage that makes every meal a memorable experience.`,
       imageFrom: 'right'
     },
   ];
@@ -53,27 +53,29 @@ export default function LandingPage() {
 
   const [visible, setVisible] = useState(Array(sections.length + 1).fill(false));
 
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          const index = Number(entry.target.getAttribute('data-index'));
-          setVisible((prev) => {
-            const newState = [...prev];
-            newState[index] = entry.isIntersecting;
-            return newState;
-          });
+ // eslint-disable-next-line react-hooks/exhaustive-deps
+useEffect(() => {
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        const index = Number(entry.target.getAttribute('data-index'));
+        setVisible((prev) => {
+          const newState = [...prev];
+          newState[index] = entry.isIntersecting;
+          return newState;
         });
-      },
-      { threshold: 0.3 }
-    );
+      });
+    },
+    { threshold: 0.3 }
+  );
 
-    refs.current.forEach((ref) => {
-      if (ref.current) observer.observe(ref.current);
-    });
+  refs.current.forEach((ref) => {
+    if (ref.current) observer.observe(ref.current);
+  });
 
-    return () => observer.disconnect();
-  }, []);
+  return () => observer.disconnect();
+}, []);
+
 
   return (
     <div className="flex flex-col items-center space-y-32 py-20 bg-gradient-to-br from-blue-50 via-sky-50 to-indigo-50">
