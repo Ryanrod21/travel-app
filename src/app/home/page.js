@@ -70,7 +70,7 @@ export default function Home() {
           <div className="w-full max-w-3xl mx-auto bg-white/90 backdrop-blur-md rounded-2xl p-4 md:p-3 border border-blue-200 shadow-lg">
             <div className="flex flex-col md:flex-row items-center md:space-x-3 space-y-2 md:space-y-0">
               {/* From Location */}
-              <div className="flex-1 flex items-center space-x-2 px-3 py-2 border-b md:border-none border-gray-300  bg-white">
+              <div className="flex-1 flex items-center space-x-2 px-3 py-2 border-b md:border-none border-gray-300 w-full  bg-white">
                 <MapPin className="h-5 w-5 text-blue-600" />
                 <input
                   placeholder="Where are you traveling from?"
@@ -82,7 +82,7 @@ export default function Home() {
               </div>
 
               {/* Destination */}
-              <div className="flex-1 flex items-center space-x-2 px-3 py-2 md:border-l border-gray-300  bg-white">
+              <div className="flex-1 flex items-center space-x-2 px-3 py-2 md:border-l border-gray-300 w-full  bg-white">
                 <Plane className="h-5 w-5 text-blue-600" />
                 <input
                   placeholder="Where do you want to explore?"
