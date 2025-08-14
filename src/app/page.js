@@ -136,7 +136,7 @@ export default function LandingPage() {
                   : '-translate-x-32 opacity-0'
               }`}
             >
-              <p className="text-xl md:text-2xl max-w-md text-center px-4 md:text-left">
+              <p className="text-black text-xl md:text-2xl max-w-md text-center px-4 md:text-left">
                 {section.text}
               </p>
             </div>
