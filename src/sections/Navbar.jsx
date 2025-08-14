@@ -50,12 +50,6 @@ export default function Navbar() {
           </Link>
 
           <div className="hidden md:flex items-center space-x-8">
-            {/* <a
-              href="#destinations"
-              className="hover:text-blue-600 transition-colors text-gray-700"
-            >
-              Destinations
-            </a> */}
             <a
               href="/explore"
               className="hover:text-blue-600 transition-colors text-gray-700"
@@ -68,10 +62,6 @@ export default function Navbar() {
             >
               About
             </a>
-            {/* <button className="px-4 py-2 border border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white bg-transparent rounded-md transition-colors">
-              Book Now
-            </button> */}
-
             {user && (
               <button
                 onClick={() => router.push('/bookmark')}
@@ -156,27 +146,36 @@ export default function Navbar() {
       {isMenuOpen && (
         <div className="md:hidden bg-white/95 backdrop-blur-md shadow-lg">
           <div className="px-2 pt-2 pb-3 space-y-1">
-            {/* <a
-              href="#destinations"
-              className="block px-3 py-2 hover:text-blue-600 text-gray-700"
-            >
-              Destinations
-            </a>
             <a
-              href="#map"
-              className="block px-3 py-2 hover:text-blue-600 text-gray-700"
+              href="/explore"
+              className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
             >
               Explore
-            </a> */}
-            <a
-              href="#about"
-              className="block px-3 py-2 hover:text-blue-600 text-gray-700"
-            >
-              About
             </a>
-            <button className="w-full mt-2 px-4 py-2 border border-blue-600 text-blue-600 bg-transparent hover:bg-blue-600 hover:text-white rounded-md transition-colors">
-              Book Now
-            </button>
+            {!user && (
+              <a
+                href="/log-in"
+                className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+              >
+                Login
+              </a>
+            )}
+            {user && (
+              <>
+                <a
+                  href={`/user/${user.uid}`}
+                  className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                >
+                  Profile
+                </a>
+                <a
+                  onClick={() => handleLogout()}
+                  className="block px-4 py-2 text-sm cursor-pointer text-gray-700 hover:bg-gray-100"
+                >
+                  Log Out
+                </a>
+              </>
+            )}
           </div>
         </div>
       )}

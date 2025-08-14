@@ -18,7 +18,7 @@ export default function UserProfile() {
         if (userSnap.exists()) {
           const data = userSnap.data();
           console.log('User data from Firestore:', data); // 👈 Check this
-          setRecentDestination(data.recentDestinations || null);
+          setRecentDestination(data.recentDestinations || []);
         }
       }
     };

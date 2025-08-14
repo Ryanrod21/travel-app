@@ -22,8 +22,6 @@ export default function Home() {
 
   const resultRef = useRef(null);
 
-  
-
   const handleSearch = async () => {
     resultRef.current?.scrollIntoView({ behavior: 'smooth' });
 
@@ -69,43 +67,36 @@ export default function Home() {
             imagination. The future of travel is here.
           </p>
 
-          <div className="max-w-3xl mx-auto bg-white/70 backdrop-blur-md rounded-full p-2 border border-blue-300/50 shadow-xl">
-            <div className="flex items-center space-x-10">
-              <div className="flex-1 flex items-center space-x-2 px-3 m-0">
+          <div className="w-full max-w-3xl mx-auto bg-white/90 backdrop-blur-md rounded-2xl p-4 md:p-3 border border-blue-200 shadow-lg">
+            <div className="flex flex-col md:flex-row items-center md:space-x-3 space-y-2 md:space-y-0">
+              {/* From Location */}
+              <div className="flex-1 flex items-center space-x-2 px-3 py-2 border-b md:border-none border-gray-300  bg-white">
                 <MapPin className="h-5 w-5 text-blue-600" />
                 <input
-                  placeholder="Where are you traveling from ?"
+                  placeholder="Where are you traveling from?"
                   value={location}
                   onChange={(e) => setLocation(e.target.value)}
-                  onKeyDown={(e) => {
-                    if (e.key === 'Enter') {
-                      e.preventDefault();
-                      handleSearch();
-                    }
-                  }}
+                  onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
                   className="border-0 bg-transparent text-gray-900 placeholder-gray-500 focus:ring-0 w-full"
                 />
               </div>
 
-              <div className="flex-1 flex items-center space-x-2 px-3 m-0 border-l border-gray-300">
+              {/* Destination */}
+              <div className="flex-1 flex items-center space-x-2 px-3 py-2 md:border-l border-gray-300  bg-white">
                 <Plane className="h-5 w-5 text-blue-600" />
                 <input
-                  placeholder="Where do you want to explore ?"
+                  placeholder="Where do you want to explore?"
                   value={prompt}
                   onChange={(e) => setPrompt(e.target.value)}
-                  onKeyDown={(e) => {
-                    if (e.key === 'Enter') {
-                      e.preventDefault();
-                      handleSearch();
-                    }
-                  }}
+                  onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
                   className="border-0 bg-transparent text-gray-900 placeholder-gray-500 focus:ring-0 w-full"
                 />
               </div>
 
+              {/* Search Button */}
               <button
                 onClick={handleSearch}
-                className="bg-gradient-to-r from-blue-500 to-indigo-500 hover:from-blue-600 hover:to-indigo-600 rounded-full px-8 py-2 text-white transition-all"
+                className="mt-2 md:mt-0 px-6 py-2 md:px-8 md:py-2 bg-gradient-to-r from-blue-500 to-indigo-500 hover:from-blue-600 hover:to-indigo-600 rounded-full text-white flex items-center justify-center transition-all w-full md:w-auto"
               >
                 <Search className="h-5 w-5" />
               </button>
