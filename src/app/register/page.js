@@ -64,7 +64,6 @@ export default function Register() {
   return (
     <div className="pt-16 pb-26 min-h-screen bg-gradient-to-br from-blue-50 via-sky-50 to-indigo-50 text-gray-900">
       <div className="pt-24 pb-16 px-5">
-        <BouncingBall />
         <div className="max-w-2xl mx-auto text-center bg-white border border-black-500 rounded pt-16">
           <h1 className="text-5xl md:text-7xl font-bold bg-gradient-to-r from-blue-600 via-sky-500 to-indigo-600 bg-clip-text text-transparent pb-16">
             Register Today!

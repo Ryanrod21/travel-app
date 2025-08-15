@@ -121,14 +121,15 @@ export default function Home() {
                 <div className="absolute inset-0 bg-white/10 backdrop-blur-sm"></div>
 
                 <div className="relative z-10 h-full flex items-center justify-center">
-                  <div className="text-center">
+                  {status === 'searching' && <SearchBall />}
+                  <div className=" relative  text-center z-10 ">
                     <Navigation
-                      className={`h-16 w-16 text-blue-600 mx-auto mb-4 z-999 ${
+                      className={`h-16 w-16 text-blue-600 mx-auto mb-4  ${
                         status === 'searching' ? 'animate-nav-move' : 'none'
                       }`}
                     />
                     <h3
-                      className={`text-center text-2xl text-blue-600 z-999 ${
+                      className={`text-center text-2xl text-blue-600 ${
                         status === 'searching' ? 'animate-pulse' : 'none'
                       }`}
                     >
@@ -136,13 +137,11 @@ export default function Home() {
                         ? 'Searching for Destinations...'
                         : 'Interactive Galactic Map'}
                     </h3>
-                    <p className="text-gray-600 z-999">
+                    <p className="text-gray-600">
                       {status === 'searching'
                         ? 'Hold tight while we scan the stars...'
                         : 'Use The Search Bar above to find your destination...'}
                     </p>
-
-                    {status === 'searching' && <SearchBall />}
                   </div>
                 </div>
               </div>
