@@ -128,7 +128,7 @@ export default function ExplorePage() {
                     </div>
                   </div>
 
-                  <div className="mt-4 flex gap-2 w-full">
+                  <div className="mt-4 flex flex-col md:flex-row gap-2 w-full ">
                     <button
                       onClick={() => handleBookJourney(destination)}
                       className="cursor-pointer px-4 py-2 bg-gradient-to-r from-blue-500 to-indigo-500 hover:from-blue-600 hover:to-indigo-600 text-white rounded-md transition-all flex items-center justify-center"

@@ -160,7 +160,7 @@ export default function DestinationViewPage() {
       <div className="flex items-center mx-auto justify-center flex-col max-w-7xl py-16">
         {mainImage && (
           <img
-            className="object-cover rounded-lg w-full h-[800px] mb-6 transition duration-300 shadow-lg"
+            className="object-cover rounded-lg max-w-[320px] md:max-w-[1200px] h-[200px] md:h-[700px] w-full mb-6 transition duration-300 shadow-lg"
             src={mainImage}
             alt="Selected destination"
           />
@@ -173,7 +173,7 @@ export default function DestinationViewPage() {
               src={url}
               alt={`Destination Image ${i}`}
               onClick={() => setMainImage(url)}
-              className={`rounded-lg object-cover w-full h-28 cursor-pointer shadow-md hover:scale-105 transition-transform duration-200 ${
+              className={`rounded-lg object-cover max-w-[90px] md:max-w-[200px] w-full h-16 md:h-28 cursor-pointer  shadow-md hover:scale-105 transition-transform duration-200  ${
                 mainImage === url ? 'ring-4 ring-blue-500' : ''
               }`}
             />
@@ -186,7 +186,7 @@ export default function DestinationViewPage() {
 
         {mainFoodImage && (
           <img
-            className="object-cover rounded-lg w-full h-[800px] mb-6 transition duration-300 shadow-lg"
+            className="object-cover rounded-lg max-w-[320px] md:max-w-[1200px] h-[200px] md:h-[700px] w-full mb-6 transition duration-300 shadow-lg"
             src={mainFoodImage}
             alt="Selected Food"
           />
@@ -199,13 +199,15 @@ export default function DestinationViewPage() {
               src={url}
               alt={`Food ${i}`}
               onClick={() => setMainFoodImage(url)}
-              className={`rounded-lg object-cover w-full h-28 cursor-pointer  shadow-md hover:scale-105 transition-transform duration-200 ${
+              className={`rounded-lg object-cover max-w-[90px] md:max-w-[200px] w-full h-16 md:h-28 cursor-pointer  shadow-md hover:scale-105 transition-transform duration-200 ${
                 mainFoodImage === url ? 'ring-4 ring-blue-500' : ''
               }`}
             />
           ))}
         </div>
-        <p className="text-gray-700 text-2xl mb-4">{destination.food}</p>
+        <p className="text-gray-700 text-2xl mb-4 text-center">
+          {destination.food}
+        </p>
 
         <h3 className="text-3xl font-bold text-left mb-6 text-blue-700">
           Local Hotels
@@ -213,7 +215,7 @@ export default function DestinationViewPage() {
 
         {mainHotelImage && (
           <img
-            className="object-cover rounded-lg w-full h-[800px] mb-6 transition duration-300 shadow-lg"
+            className="object-cover rounded-lg max-w-[320px] md:max-w-[1200px] h-[200px] md:h-[700px] w-full mb-6 transition duration-300 shadow-lg"
             src={mainHotelImage}
             alt="Selected Hotel"
           />
@@ -226,16 +228,18 @@ export default function DestinationViewPage() {
               src={url}
               alt={`Hotel ${i}`}
               onClick={() => setMainHotelImage(url)}
-              className={`rounded-lg object-cover w-full h-28 cursor-pointer shadow-md hover:scale-105 transition-transform duration-200 ${
+              className={`rounded-lg object-cover max-w-[90px] md:max-w-[200px] w-full h-16 md:h-28 cursor-pointer  shadow-md hover:scale-105 transition-transform duration-200  ${
                 mainHotelImage === url ? 'ring-4 ring-blue-500' : ''
               }`}
             />
           ))}
         </div>
-        <p className="text-gray-700 text-2xl mb-6">{destination.hotel}</p>
+        <p className="text-gray-700 text-2xl mb-6 text-center">
+          {destination.hotel}
+        </p>
 
-        <div className="flex flex-col justify-between items-start mb-3 mt-5 w-full">
-          <h3 className="text-3xl font-bold text-left mb-4 text-blue-700">
+        <div className="flex flex-col justify-between items-start mb-3 mt-5 w-full text-center">
+          <h3 className="text-3xl font-bold text-center md:text-left mb-4 text-blue-700 w-full">
             More about {destination.name}
           </h3>
           <p className="text-gray-700 text-2xl mb-4">
@@ -248,16 +252,16 @@ export default function DestinationViewPage() {
           <p className="text-gray-700 text-2xl mb-4">{destination.sports}</p>
         </div>
 
-        <div className="flex flex-col justify-between items-start mb-3 mt-5 w-full">
-          <h3 className="text-3xl font-bold text-left mb-4 text-blue-700">
+        <div className="flex flex-col justify-between items-start mb-3 mt-5 w-full text-center">
+          <h3 className="text-3xl font-bold md:text-left mb-4 text-blue-700 w-full text-center">
             Flight Time
           </h3>
           <p className="text-gray-700 text-2xl mb-4">{destination.travel}</p>
         </div>
 
-        <div className="flex justify-between items-center w-full mt-10">
+        <div className="flex flex-col md:flex-row justify-between items-center w-full mt-10">
           <div className="mb-4 text-left">
-            <h4 className="text-xl font-semibold text-blue-600 mb-2">
+            <h4 className="text-xl font-semibold text-blue-600 mb-2 text-center md:text-left">
               Highlights:
             </h4>
             <div className="flex flex-wrap gap-1">
@@ -278,13 +282,13 @@ export default function DestinationViewPage() {
                 onClick={toggleBookmark}
                 onMouseEnter={() => setHovered(true)}
                 onMouseLeave={() => setHovered(false)}
-                className={`cursor-pointer w-95 h-12 px-4 py-2 rounded-md transition-all flex items-center justify-center
-              ${
-                isBookmarked
-                  ? 'bg-green-600 hover:bg-red-600 text-white'
-                  : 'bg-blue-500 hover:bg-indigo-600 text-white'
-              }
-              `}
+                className={`w-full md:w-96 h-12 px-4 py-2 rounded-md transition-all flex items-center justify-center
+        ${
+          isBookmarked
+            ? 'bg-green-600 hover:bg-red-600 text-white'
+            : 'bg-blue-500 hover:bg-indigo-600 text-white'
+        }
+      `}
               >
                 <Icon className="mr-2" />
                 {label}
@@ -294,13 +298,13 @@ export default function DestinationViewPage() {
             {!user && (
               <button
                 onClick={() => router.push('/register')}
-                className={`cursor-pointer w-95 h-12 px-4 py-2 rounded-md transition-all flex items-center justify-center
-              ${
-                isBookmarked
-                  ? 'bg-green-600 hover:bg-red-600 text-white'
-                  : 'bg-blue-500 hover:bg-indigo-600 text-white'
-              }
-              `}
+                className={`w-full md:w-96 h-12 px-4 py-2 rounded-md transition-all flex items-center justify-center
+        ${
+          isBookmarked
+            ? 'bg-green-600 hover:bg-red-600 text-white'
+            : 'bg-blue-500 hover:bg-indigo-600 text-white'
+        }
+      `}
               >
                 <Icon className="mr-2" />
                 Register Now to Save Your Trips !!!
@@ -311,7 +315,7 @@ export default function DestinationViewPage() {
               onClick={() =>
                 router.push(`/checkout/${encodeURIComponent(destination.name)}`)
               }
-              className="cursor-pointer w-95 h-12 px-4 py-2 bg-gradient-to-r from-blue-500 to-indigo-500 hover:from-blue-600 hover:to-indigo-600 text-white rounded-md transition-all flex items-center justify-center"
+              className="w-full md:w-96 h-12 px-4 py-2 bg-gradient-to-r from-blue-500 to-indigo-500 hover:from-blue-600 hover:to-indigo-600 text-white rounded-md transition-all flex items-center justify-center"
             >
               <Plane className="h-4 w-4 mr-2" />
               Book Journey

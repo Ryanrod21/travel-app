@@ -120,7 +120,7 @@ export default function Checkout() {
           </p>
 
           {images.length > 0 && (
-            <div className="grid grid-cols-2 gap-4 mb-8">
+            <div className="flex flex-col md:flex-none md:grid md:grid-cols-2 gap-4 mb-8">
               {images.map((img, idx) => (
                 <img
                   key={idx}
